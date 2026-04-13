@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Universe Profile</title>
+<title>Sertan Universe</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -16,25 +16,11 @@ body{
   color:white;
 }
 
-/* SPACE BACKGROUND */
-#space{
+/* CANVAS */
+#bg{
   position:fixed;
-  width:100%;
-  height:100%;
-  background:url("https://upload.wikimedia.org/wikipedia/commons/3/3f/Milky_Way_IR_Spitzer.jpg");
-  background-size:cover;
-  background-position:center;
-  opacity:0.5;
-  z-index:-2;
-}
-
-/* STAR FIELD */
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  opacity:0.8;
+  top:0;
+  left:0;
 }
 
 /* PROFILE */
@@ -45,7 +31,7 @@ body{
   z-index:10;
 }
 
-#profile img{
+#pfp{
   width:90px;
   height:90px;
   border-radius:50%;
@@ -55,18 +41,18 @@ body{
 }
 
 /* CENTER INFO */
-#center{
+#info{
   position:absolute;
   bottom:120px;
   width:100%;
   text-align:center;
 }
 
-.card{
+.box{
   display:inline-block;
   padding:10px 18px;
   margin:5px;
-  border-radius:14px;
+  border-radius:12px;
   background:rgba(255,255,255,0.08);
   backdrop-filter:blur(10px);
 }
@@ -77,7 +63,7 @@ body{
   position:absolute;
   top:20px;
   right:20px;
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,0.8);
   padding:10px;
   border-radius:10px;
 }
@@ -87,54 +73,50 @@ input{width:160px;margin:5px;}
 
 <body>
 
-<div id="space"></div>
+<canvas id="bg"></canvas>
 
 <div id="profile">
   <img id="pfp" onclick="openAdmin()">
 </div>
 
-<div id="center">
-  <div class="card">Sertan Nalça</div><br>
-  <div class="card">+355692033673</div>
+<div id="info">
+  <div class="box">Sertan Nalça</div><br>
+  <div class="box">+355692033673</div>
 </div>
 
 <div id="admin">
+  <input type="file" id="file"><br>
   <input id="pass" placeholder="Password"><br>
-  <input id="img" placeholder="Photo URL"><br>
   <button onclick="save()">Save</button>
 </div>
 
-<canvas id="bg"></canvas>
-
 <script>
 
-/* ===== MOVING STARS (diagonal drift) ===== */
+/* ===== STAR SYSTEM (diagonal motion) ===== */
 for(let i=0;i<250;i++){
   let s=document.createElement("div");
-  s.className="star";
+  s.style.position="absolute";
+  s.style.width="2px";
+  s.style.height="2px";
+  s.style.background="white";
   s.style.left=Math.random()*100+"vw";
   s.style.top=Math.random()*100+"vh";
   document.body.appendChild(s);
 
-  moveStar(s);
-}
-
-function moveStar(el){
   let x = 0.3 + Math.random()*0.6;
   let y = 0.2 + Math.random()*0.5;
 
-  function animate(){
-    let rect = el.getBoundingClientRect();
+  function move(){
+    let r = s.getBoundingClientRect();
+    s.style.left = r.left + x + "px";
+    s.style.top = r.top + y + "px";
 
-    el.style.left = rect.left + x + "px";
-    el.style.top = rect.top + y + "px";
+    if(r.left > innerWidth) s.style.left="0px";
+    if(r.top > innerHeight) s.style.top="0px";
 
-    if(rect.left > window.innerWidth) el.style.left = "0px";
-    if(rect.top > window.innerHeight) el.style.top = "0px";
-
-    requestAnimationFrame(animate);
+    requestAnimationFrame(move);
   }
-  animate();
+  move();
 }
 
 /* ===== THREE JS UNIVERSE ===== */
@@ -143,60 +125,70 @@ const camera = new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("bg"),alpha:true});
 renderer.setSize(innerWidth,innerHeight);
-camera.position.z = 3;
+camera.position.z=3;
 
-/* 🌍 EARTH */
+/* 🌌 REAL GALAXY SPHERE (FIXED) */
+const galaxy = new THREE.Mesh(
+  new THREE.SphereGeometry(50,32,32),
+  new THREE.MeshBasicMaterial({
+    map:new THREE.TextureLoader().load("https://upload.wikimedia.org/wikipedia/commons/3/3f/Milky_Way_IR_Spitzer.jpg"),
+    side:THREE.BackSide
+  })
+);
+scene.add(galaxy);
+
+/* 🌍 EARTH (BIG + CLEAR) */
 const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(1,64,64),
+  new THREE.SphereGeometry(1.2,64,64),
   new THREE.MeshBasicMaterial({
     map:new THREE.TextureLoader().load("https://threejs.org/examples/textures/earth_atmos_2048.jpg")
   })
 );
 scene.add(earth);
 
-/* 🌙 MOON */
+/* 🌙 MOON (VISIBLE BIGGER) */
 const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(0.27,32,32),
+  new THREE.SphereGeometry(0.35,32,32),
   new THREE.MeshBasicMaterial({
     map:new THREE.TextureLoader().load("https://threejs.org/examples/textures/moon_1024.jpg")
   })
 );
 scene.add(moon);
 
-/* ✨ UNIVERSAL DRIFT (whole scene moves slightly) */
-let t = 0;
-
 /* ANIMATE */
 function animate(){
   requestAnimationFrame(animate);
 
-  t += 0.001;
-
-  /* Earth rotation */
   earth.rotation.y += 0.002;
 
-  /* Moon orbit */
-  moon.position.x = Math.sin(Date.now()*0.001)*2;
-  moon.position.z = Math.cos(Date.now()*0.001)*2;
-
-  /* Universe drift effect */
-  camera.position.x = Math.sin(t)*0.1;
-  camera.position.y = Math.cos(t)*0.1;
+  moon.position.x = Math.sin(Date.now()*0.001)*2.2;
+  moon.position.z = Math.cos(Date.now()*0.001)*2.2;
 
   renderer.render(scene,camera);
 }
 animate();
 
-/* ===== PROFILE SYSTEM ===== */
+/* ===== PHOTO UPLOAD (NO URL) ===== */
+document.getElementById("file").onchange = function(e){
+  let reader = new FileReader();
+  reader.onload = function(){
+    localStorage.setItem("pfp",reader.result);
+    load();
+  }
+  reader.readAsDataURL(e.target.files[0]);
+};
+
+/* ADMIN */
 function openAdmin(){
-  let pass = prompt("Password:");
-  if(pass === "Sertan2906"){
-    document.getElementById("admin").style.display="block";
+  let p = prompt("Password:");
+  if(p==="Sertan2906"){
+    admin.style.display="block";
   }
 }
 
+/* SAVE LOAD */
 function save(){
-  localStorage.setItem("pfp",img.value);
+  alert("Photo saved!");
   load();
 }
 
