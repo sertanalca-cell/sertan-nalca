@@ -1,173 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body {
-  margin: 0;
-  overflow: hidden;
-  font-family: Georgia;
-}
-
-/* 🌌 SAMANYOLU ARKA PLAN (SENİN GÖRSEL) */
-.bg {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url('galaxy.jpg') center/cover no-repeat;
-  z-index: -2;
-}
-
-/* 3D canvas üstte */
-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-}
-
-.content {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  top: 10%;
-  color: white;
-}
-
-.subtitle {
-  color: #b48cff;
-  transition: 1s;
-}
-
-/* butonlar */
-.buttons {
-  position: absolute;
-  bottom: 80px;
-  width: 100%;
-}
-
-.btn {
-  width: 80%;
-  margin: 10px auto;
-  padding: 15px;
-  border-radius: 25px;
-  background: rgba(0,0,0,0.4);
-  color: white;
-  position: relative;
-  overflow: hidden;
-}
-
-/* 🚀 dönen obje */
-.ship {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background: white;
-  border-radius: 50%;
-  animation: spin 6s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg) translateX(120px); }
-  100% { transform: rotate(360deg) translateX(120px); }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sertan Nalça</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; background: #000; font-family: Arial, sans-serif; }
+    canvas { display: block; }
+    
+    .overlay {
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: white;
+      z-index: 10;
+      pointer-events: none;
+    }
+    h1 {
+      font-size: 3.5rem;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+    }
+    p {
+      font-size: 1.3rem;
+      margin: 10px 0 0;
+      color: #a0f0ff;
+      text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="bg"></div>
-<canvas id="c"></canvas>
-
-<div class="content">
-  <h1>Sertan Nalça</h1>
-  <div class="subtitle" id="text">AI Developer & Creator</div>
-</div>
-
-<div class="buttons">
-  <div class="btn" onclick="window.location='https://instagram.com/sertanalca'">
-    Instagram
-    <div class="ship"></div>
+  <div class="overlay">
+    <h1>Sertan Nalça</h1>
+    <p>AI Developer & Creator</p>
   </div>
 
-  <div class="btn" onclick="window.location='https://wa.me/355692033673'">
-    WhatsApp
-    <div class="ship"></div>
-  </div>
-</div>
+  <script>
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.body.appendChild(renderer.domElement);
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    camera.position.z = 4;
 
-<script>
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({canvas: document.getElementById("c"), alpha:true});
-renderer.setSize(innerWidth, innerHeight);
+    // Işıklar
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
 
-camera.position.z = 4;
+    // Gerçekçi Dünya (Earth)
+    const earthGeometry = new THREE.SphereGeometry(1.2, 64, 64);
+    const earthTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
+    const bumpTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_normal_2048.jpg');
+    const specularTexture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_specular_2048.jpg');
 
-// 🌍 GERÇEKÇİ DÜNYA
-const loader = new THREE.TextureLoader();
+    const earthMaterial = new THREE.MeshPhongMaterial({
+      map: earthTexture,
+      bumpMap: bumpTexture,
+      bumpScale: 0.05,
+      specularMap: specularTexture,
+      specular: 0x333333,
+      shininess: 5
+    });
 
-const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 64, 64),
-  new THREE.MeshStandardMaterial({
-    map: loader.load('https://threejs.org/examples/textures/earth_atmos_2048.jpg')
-  })
-);
-scene.add(earth);
+    const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+    scene.add(earth);
 
-// 🌙 AY
-const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(0.27, 32, 32),
-  new THREE.MeshStandardMaterial({
-    map: loader.load('https://threejs.org/examples/textures/moon_1024.jpg')
-  })
-);
-scene.add(moon);
+    // Hafif atmosfer glow efekti
+    const atmosphereGeometry = new THREE.SphereGeometry(1.25, 64, 64);
+    const atmosphereMaterial = new THREE.MeshPhongMaterial({
+      color: 0x00ddff,
+      transparent: true,
+      opacity: 0.15,
+      blending: THREE.AdditiveBlending,
+      side: THREE.BackSide
+    });
+    const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+    earth.add(atmosphere);
 
-// ☀️ GÜNEŞ IŞIĞI → yarısı aydınlık yarısı karanlık
-const light = new THREE.DirectionalLight(0xffffff, 1.5);
-light.position.set(5, 2, 5);
-scene.add(light);
+    // Yıldızlar (Particles) - sol üstten sağ alta yavaşça kayıyor
+    const starsCount = 8000;
+    const starsGeometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(starsCount * 3);
+    const colors = new Float32Array(starsCount * 3);
 
-let angle = 0;
+    for (let i = 0; i < starsCount * 3; i += 3) {
+      // Rastgele pozisyonlar (önceki sahnenin derinliğinde)
+      positions[i]     = (Math.random() - 0.5) * 200;   // x
+      positions[i + 1] = (Math.random() - 0.5) * 200;   // y
+      positions[i + 2] = (Math.random() - 0.5) * 200;   // z
 
-function animate(){
-  requestAnimationFrame(animate);
+      const brightness = Math.random() * 0.8 + 0.2;
+      colors[i]     = brightness;
+      colors[i + 1] = brightness;
+      colors[i + 2] = brightness;
+    }
 
-  // dünya dönüyor
-  earth.rotation.y += 0.002;
+    starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-  // ay dönüyor
-  angle += 0.01;
-  moon.position.set(Math.sin(angle)*2, 0, Math.cos(angle)*2);
+    const starsMaterial = new THREE.PointsMaterial({
+      size: 0.15,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending
+    });
 
-  // kamera uzaklaşıyor (cosmos hissi)
-  camera.position.z += 0.0005;
+    const starField = new THREE.Points(starsGeometry, starsMaterial);
+    scene.add(starField);
 
-  renderer.render(scene, camera);
-}
-animate();
+    // Animasyon döngüsü
+    function animate() {
+      requestAnimationFrame(animate);
 
-// ✨ YAZI TOZ EFEKTİ
-const t = document.getElementById("text");
+      // Dünya yavaşça dönüyor
+      earth.rotation.y += 0.0008;
 
-setInterval(()=>{
-  t.style.opacity = 0;
+      // Yıldızlar yavaşça sol üst → sağ alt yönde kayıyor
+      starField.position.x += 0.008;   // sağa
+      starField.position.y -= 0.008;   // aşağı
 
-  setTimeout(()=>{
-    t.innerText = t.innerText.includes("AI")
-      ? "I'm creating something amazing for everyone"
-      : "AI Developer & Creator";
+      // Yıldızlar ekran dışına çıkınca tekrar başa al (sonsuz döngü)
+      if (starField.position.x > 30) starField.position.x = -30;
+      if (starField.position.y < -30) starField.position.y = 30;
 
-    t.style.opacity = 1;
-  },1000);
+      renderer.render(scene, camera);
+    }
 
-},5000);
-</script>
+    animate();
 
+    // Pencere yeniden boyutlandırma
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
 </body>
 </html>
