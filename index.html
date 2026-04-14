@@ -16,44 +16,45 @@
 
         .space-bg {
             background: linear-gradient(to bottom, #000011 0%, #0a001f 100%);
-            background-image: url('https://picsum.photos/id/1015/2000/1200'); /* Derin uzay galaksi - çok güzel bir örnek */
+            background-image: url('https://picsum.photos/id/1015/2000/1200'); /* Derin uzay nebula - değiştirebilirsin */
             background-size: cover;
             background-position: center;
-            animation: subtleDrift 90s linear infinite;
+            animation: subtleDrift 100s linear infinite;
         }
 
         @keyframes subtleDrift {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+            0% { background-position: 20% 50%; }
+            100% { background-position: 80% 50%; }
         }
 
         .globe-container {
-            width: 220px;
-            height: 220px;
+            width: 210px;
+            height: 210px;
             position: relative;
-            margin: 0 auto;
+            margin: 0 auto 40px;
         }
 
         .globe {
-            width: 220px;
-            height: 220px;
+            width: 210px;
+            height: 210px;
             border-radius: 50%;
-            background: radial-gradient(circle at 40% 30%, #4ade80, #166534 40%, #052e16 70%);
+            background: radial-gradient(circle at 38% 32%, #67e8f9, #22c55e 35%, #166534 65%, #052e16);
             box-shadow: 
-                0 0 80px rgba(74, 222, 128, 0.8),
-                inset 40px 40px 60px rgba(255,255,255,0.25),
-                inset -40px -40px 80px rgba(0,0,0,0.7);
-            animation: rotateGlobe 35s linear infinite;
+                0 0 70px rgba(103, 232, 249, 0.7),
+                inset 35px 30px 50px rgba(255,255,255,0.3),
+                inset -40px -40px 70px rgba(0,0,0,0.8);
+            animation: rotateGlobe 40s linear infinite;
             position: relative;
             overflow: hidden;
+            border: 3px solid rgba(255,255,255,0.15);
         }
 
         .globe::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.35) 10%, transparent 50%);
-            animation: shine 8s linear infinite;
+            background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.4) 8%, transparent 55%);
+            animation: shine 10s linear infinite;
         }
 
         @keyframes rotateGlobe {
@@ -62,91 +63,93 @@
         }
 
         @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(300%); }
+            0% { transform: translateX(-120%); }
+            100% { transform: translateX(280%); }
         }
 
-        /* Küçük Ay */
         .moon {
             position: absolute;
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             background: #e2e8f0;
             border-radius: 50%;
-            box-shadow: 0 0 20px #e2e8f0,
-                        inset 8px 8px 12px rgba(0,0,0,0.6);
-            top: 20px;
-            left: 180px;
-            animation: moonOrbit 28s linear infinite;
+            box-shadow: 0 0 18px #e2e8f0, inset 6px 6px 10px rgba(0,0,0,0.5);
+            top: 15px;
+            left: 170px;
+            animation: moonOrbit 32s linear infinite;
         }
 
         @keyframes moonOrbit {
-            from { transform: rotate(0deg) translateX(95px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(95px) rotate(-360deg); }
+            from { transform: rotate(0deg) translateX(98px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(98px) rotate(-360deg); }
         }
 
         .link-btn {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 15px;
+            padding: 14px 20px;
         }
         
         .link-btn:hover {
-            transform: translateY(-6px) scale(1.04);
-            box-shadow: 0 0 40px rgba(168, 85, 247, 0.75);
-            background: rgba(255,255,255,0.18);
+            transform: translateY(-4px);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
         }
     </style>
 </head>
-<body class="space-bg min-h-screen flex items-center justify-center py-12 px-4 text-white relative">
+<body class="space-bg min-h-screen flex items-center justify-center py-10 px-4 text-white relative">
 
     <div class="max-w-md w-full text-center z-10">
         
-        <!-- İsim -->
-        <h1 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 text-white drop-shadow-2xl" 
-            style="font-family: 'Playfair Display', serif; text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);">
+        <!-- İsim (daha küçük) -->
+        <h1 class="text-4xl font-bold tracking-tighter mb-1 text-white drop-shadow-xl" 
+            style="font-family: 'Playfair Display', serif;">
             Sertan Nalça
         </h1>
-        <p class="text-purple-300 text-xl mb-12 tracking-wide">AI Developer & Creator</p>
+        <p class="text-purple-300 text-lg mb-10">AI Developer & Creator</p>
 
-        <!-- Dönen Dünya -->
-        <div class="globe-container mb-12">
-            <div class="globe">
-                <!-- Kıta efekti için hafif overlay -->
-                <div class="absolute inset-0 bg-[radial-gradient(#052e16_1px,transparent_1px)] bg-[length:12px_12px] opacity-40"></div>
-            </div>
+        <!-- Gerçekçi Dönen Dünya -->
+        <div class="globe-container">
+            <div class="globe"></div>
             <!-- Ay -->
             <div class="moon"></div>
         </div>
 
-        <!-- Link Butonları -->
-        <div class="space-y-4 px-6">
-            <a href="https://instagram.com/yourusername" target="_blank" 
-               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
+        <!-- Link Butonları (daha küçük) -->
+        <div class="space-y-3 px-6">
+            <a href="https://instagram.com/sertanalca" target="_blank" 
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium rounded-3xl flex items-center justify-center gap-3 backdrop-blur-md">
                 <i class="fab fa-instagram text-2xl"></i>
                 <span>Instagram</span>
             </a>
             
+            <a href="https://wa.me/355692033673" target="_blank" 
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium rounded-3xl flex items-center justify-center gap-3 backdrop-blur-md">
+                <i class="fab fa-whatsapp text-2xl"></i>
+                <span>WhatsApp</span>
+            </a>
+            
+            <a href="https://www.google.com/maps/search/?api=1&query=Sarand%C3%AB" target="_blank" 
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium rounded-3xl flex items-center justify-center gap-3 backdrop-blur-md">
+                📍 <span>Konumum - Sarandë</span>
+            </a>
+            
             <a href="https://yourwebsite.com" target="_blank" 
-               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium rounded-3xl flex items-center justify-center gap-3 backdrop-blur-md">
                 🌐 Web Sitesim
             </a>
             
             <a href="https://github.com/yourusername" target="_blank" 
-               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium rounded-3xl flex items-center justify-center gap-3 backdrop-blur-md">
                 <i class="fab fa-github text-2xl"></i>
                 <span>GitHub Projelerim</span>
             </a>
-            
-            <a href="https://wa.me/905xxxxxxxxx" target="_blank" 
-               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
-                💬 İletişime Geç
-            </a>
         </div>
 
-        <p class="text-white/40 text-xs mt-14">Sertan Nalça • Digital Identity</p>
+        <p class="text-white/40 text-xs mt-12">Sertan Nalça • Digital Identity Card</p>
     </div>
 
     <!-- Yıldız efekti -->
     <div class="absolute inset-0 pointer-events-none" 
-         style="background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 2px); background-size: 60px 60px; opacity: 0.7;"></div>
+         style="background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 2px); background-size: 70px 70px;"></div>
 </body>
 </html>
