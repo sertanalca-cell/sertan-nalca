@@ -3,128 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertan - Digital Identity</title>
+    <title>Sertan Nalça • Digital Identity</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
+
         body {
             font-family: 'Inter', sans-serif;
+            overflow: hidden;
         }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+
+        .space-bg {
+            background: linear-gradient(to bottom, #000011 0%, #0a001f 100%);
+            background-image: url('https://picsum.photos/id/1015/2000/1200'); /* Derin uzay galaksi - çok güzel bir örnek */
+            background-size: cover;
+            background-position: center;
+            animation: subtleDrift 90s linear infinite;
         }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #330033 100%);
-            animation: gradientShift 15s ease infinite;
-        }
-        
-        @keyframes gradientShift {
+
+        @keyframes subtleDrift {
             0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
-        
+
+        .globe-container {
+            width: 220px;
+            height: 220px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .globe {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 30%, #4ade80, #166534 40%, #052e16 70%);
+            box-shadow: 
+                0 0 80px rgba(74, 222, 128, 0.8),
+                inset 40px 40px 60px rgba(255,255,255,0.25),
+                inset -40px -40px 80px rgba(0,0,0,0.7);
+            animation: rotateGlobe 35s linear infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .globe::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.35) 10%, transparent 50%);
+            animation: shine 8s linear infinite;
+        }
+
+        @keyframes rotateGlobe {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(300%); }
+        }
+
+        /* Küçük Ay */
+        .moon {
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            background: #e2e8f0;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #e2e8f0,
+                        inset 8px 8px 12px rgba(0,0,0,0.6);
+            top: 20px;
+            left: 180px;
+            animation: moonOrbit 28s linear infinite;
+        }
+
+        @keyframes moonOrbit {
+            from { transform: rotate(0deg) translateX(95px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(95px) rotate(-360deg); }
+        }
+
         .link-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
         .link-btn:hover {
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 
-                        0 0 15px rgba(168, 85, 247, 0.5);
-        }
-        
-        .profile-img {
-            transition: all 0.4s ease;
-        }
-        
-        .profile-img:hover {
-            transform: scale(1.08) rotate(3deg);
+            transform: translateY(-6px) scale(1.04);
+            box-shadow: 0 0 40px rgba(168, 85, 247, 0.75);
+            background: rgba(255,255,255,0.18);
         }
     </style>
 </head>
-<body class="gradient-bg min-h-screen text-white flex items-center justify-center py-12 px-4">
-    <div class="max-w-md w-full mx-auto">
-        <!-- Kart -->
-        <div class="glass rounded-3xl p-8 shadow-2xl text-center">
-            
-            <!-- Profil Fotoğrafı -->
-            <div class="relative mx-auto w-32 h-32 mb-6">
-                <img id="profilePhoto" 
-                     src="https://via.placeholder.com/300" 
-                     alt="Profil Fotoğrafı" 
-                     class="profile-img w-32 h-32 rounded-2xl object-cover border-4 border-white/30 shadow-xl">
-                <!-- Hafif glow halka -->
-                <div class="absolute inset-0 rounded-2xl border border-purple-500/30 animate-pulse"></div>
-            </div>
+<body class="space-bg min-h-screen flex items-center justify-center py-12 px-4 text-white relative">
 
-            <!-- İsim ve Unvan -->
-            <h1 id="name" class="text-4xl font-bold tracking-tight mb-1">Sertan</h1>
-            <p id="title" class="text-purple-300 text-xl font-medium mb-3">AI Developer & Creator</p>
-            
-            <!-- Bio -->
-            <p id="bio" class="text-gray-300 text-base leading-relaxed mb-8 max-w-xs mx-auto">
-                AI ile web ve mobil uygulamalar geliştiriyorum. 
-                Fikirleri hızlıca gerçeğe dönüştürüyorum.
-            </p>
+    <div class="max-w-md w-full text-center z-10">
+        
+        <!-- İsim -->
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tighter mb-2 text-white drop-shadow-2xl" 
+            style="font-family: 'Playfair Display', serif; text-shadow: 0 0 30px rgba(168, 85, 247, 0.6);">
+            Sertan Nalça
+        </h1>
+        <p class="text-purple-300 text-xl mb-12 tracking-wide">AI Developer & Creator</p>
 
-            <!-- Sosyal İkonlar -->
-            <div class="flex justify-center gap-6 mb-10 text-2xl">
-                <a href="https://instagram.com/seninhesabin" target="_blank" class="hover:text-pink-400 transition-colors"><i class="fab fa-instagram"></i></a>
-                <a href="https://x.com/seninhesabin" target="_blank" class="hover:text-sky-400 transition-colors"><i class="fab fa-x-twitter"></i></a>
-                <a href="https://linkedin.com/in/seninhesabin" target="_blank" class="hover:text-blue-400 transition-colors"><i class="fab fa-linkedin"></i></a>
-                <a href="https://github.com/seninhesabin" target="_blank" class="hover:text-gray-300 transition-colors"><i class="fab fa-github"></i></a>
-                <a href="https://wa.me/905xxxxxxxxx" target="_blank" class="hover:text-green-400 transition-colors"><i class="fab fa-whatsapp"></i></a>
+        <!-- Dönen Dünya -->
+        <div class="globe-container mb-12">
+            <div class="globe">
+                <!-- Kıta efekti için hafif overlay -->
+                <div class="absolute inset-0 bg-[radial-gradient(#052e16_1px,transparent_1px)] bg-[length:12px_12px] opacity-40"></div>
             </div>
-
-            <!-- Link Butonları -->
-            <div class="space-y-4">
-                <a href="https://seninwebsiten.com" target="_blank" 
-                   class="link-btn block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium py-4 px-6 rounded-2xl text-lg flex items-center justify-center gap-3">
-                    <i class="fas fa-globe"></i>
-                    <span>Web Sitesim</span>
-                </a>
-                
-                <a href="https://seninportfolio.com" target="_blank" 
-                   class="link-btn block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium py-4 px-6 rounded-2xl text-lg flex items-center justify-center gap-3">
-                    <i class="fas fa-briefcase"></i>
-                    <span>Portfolio</span>
-                </a>
-                
-                <a href="https://seninemergentprojeleri.com" target="_blank" 
-                   class="link-btn block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium py-4 px-6 rounded-2xl text-lg flex items-center justify-center gap-3">
-                    <i class="fas fa-project-diagram"></i>
-                    <span>Projelerim</span>
-                </a>
-                
-                <!-- Buraya yeni buton eklemek çok kolay -->
-                <!-- Örnek: 
-                <a href="URL" target="_blank" class="link-btn block ..."> ... </a>
-                -->
-            </div>
+            <!-- Ay -->
+            <div class="moon"></div>
         </div>
 
-        <!-- Footer -->
-        <p class="text-center text-white/40 text-xs mt-8">
-            Made with ❤️ for Instagram
-        </p>
+        <!-- Link Butonları -->
+        <div class="space-y-4 px-6">
+            <a href="https://instagram.com/yourusername" target="_blank" 
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
+                <i class="fab fa-instagram text-2xl"></i>
+                <span>Instagram</span>
+            </a>
+            
+            <a href="https://yourwebsite.com" target="_blank" 
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
+                🌐 Web Sitesim
+            </a>
+            
+            <a href="https://github.com/yourusername" target="_blank" 
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
+                <i class="fab fa-github text-2xl"></i>
+                <span>GitHub Projelerim</span>
+            </a>
+            
+            <a href="https://wa.me/905xxxxxxxxx" target="_blank" 
+               class="link-btn block bg-white/10 hover:bg-white/20 border border-white/30 font-medium py-5 px-8 rounded-3xl text-lg flex items-center justify-center gap-3 backdrop-blur-md">
+                💬 İletişime Geç
+            </a>
+        </div>
+
+        <p class="text-white/40 text-xs mt-14">Sertan Nalça • Digital Identity</p>
     </div>
 
-    <script>
-        // Buradan kolayca bilgilerini değiştir:
-        document.getElementById('name').textContent = "Sertan";
-        document.getElementById('title').textContent = "AI Developer & Creator";
-        document.getElementById('bio').textContent = "AI ile web ve mobil uygulamalar geliştiriyorum. Fikirleri hızlıca gerçeğe dönüştürüyorum.";
-        
-        // Profil fotoğrafını değiştir (kendi fotoğraf linkini koy):
-        document.getElementById('profilePhoto').src = "https://via.placeholder.com/300"; // ← buraya kendi fotoğraf URL'ni yaz
-    </script>
+    <!-- Yıldız efekti -->
+    <div class="absolute inset-0 pointer-events-none" 
+         style="background: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 2px); background-size: 60px 60px; opacity: 0.7;"></div>
 </body>
 </html>
