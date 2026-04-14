@@ -48,7 +48,7 @@
       position: absolute;
       bottom: 14%;
       display: flex;
-      gap: 20px;
+      gap: 18px;
       pointer-events: all;
     }
 
@@ -56,9 +56,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 12px 28px;
-      font-size: 1.1rem;
+      gap: 8px;
+      padding: 10px 24px;
+      font-size: 1rem;
       font-weight: 500;
       color: white;
       border: none;
@@ -66,12 +66,12 @@
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
-      box-shadow: 0 0 12px rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.25);
     }
 
     .btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 18px rgba(0, 255, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
     }
 
     .instagram {
@@ -107,16 +107,16 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     document.body.appendChild(renderer.domElement);
 
-    camera.position.z = 5;
+    camera.position.z = 5.2;
 
     // Işıklar
-    scene.add(new THREE.AmbientLight(0x404060, 1));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.3);
-    dirLight.position.set(5, 4, 8);
+    scene.add(new THREE.AmbientLight(0x404060, 1.1));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);
+    dirLight.position.set(6, 5, 10);
     scene.add(dirLight);
 
-    // Dünya — biraz büyütüldü
-    const earthRadius = 1.05;   // önceki 0.95'ti, şimdi biraz daha büyük
+    // Dünya
+    const earthRadius = 1.05;
     const earthGeo = new THREE.SphereGeometry(earthRadius, 64, 64);
     
     const earthMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
@@ -146,13 +146,14 @@
     });
     earth.add(new THREE.Mesh(atmGeo, atmMat));
 
-    // Ay — biraz büyütüldü (çok azıcık)
-    const moonRadius = 0.28;   // önceki 0.24'tü, şimdi biraz daha büyük
-    const moonGeo = new THREE.SphereGeometry(moonRadius, 48, 48);
+    // Ay — daha düzgün ve kaliteli
+    const moonRadius = 0.29;
+    const moonGeo = new THREE.SphereGeometry(moonRadius, 64, 64);
     const moonMat = new THREE.MeshPhongMaterial({
-      map: new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg'),
-      bumpMap: new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/ldem_3_8bit.jpg'),
-      bumpScale: 0.1
+      map: new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/moon_1024.jpg'),
+      bumpMap: new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/moon_1024.jpg'),
+      bumpScale: 0.08,
+      shininess: 2
     });
     const moon = new THREE.Mesh(moonGeo, moonMat);
     scene.add(moon);
@@ -169,7 +170,9 @@
       posArray[i + 2] = (Math.random() - 0.5) * 200 - 60;
       
       const b = Math.random() * 0.6 + 0.4;
-      colorArray[i] = b; colorArray[i+1] = b; colorArray[i+2] = b;
+      colorArray[i] = b; 
+      colorArray[i+1] = b; 
+      colorArray[i+2] = b;
     }
 
     starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -232,17 +235,16 @@
       requestAnimationFrame(animate);
       time += 0.012;
 
-      // Dünya dönme
-      earth.rotation.y += 0.0012 + velY * 0.88;
+      earth.rotation.y += 0.0011 + velY * 0.88;
       earth.rotation.x += velX * 0.88;
       velX *= 0.88;
       velY *= 0.88;
 
-      // Ay çok yavaş dönüyor
-      const moonDist = 2.75;   // Dünya büyüdüğü için mesafe de biraz arttırıldı
-      moon.position.x = Math.cos(time * 0.18) * moonDist;
-      moon.position.z = Math.sin(time * 0.18) * moonDist;
-      moon.rotation.y = time * 0.3;
+      // Ay yavaş ve düzgün dönüyor
+      const moonDist = 2.8;
+      moon.position.x = Math.cos(time * 0.16) * moonDist;
+      moon.position.z = Math.sin(time * 0.16) * moonDist;
+      moon.rotation.y = time * 0.25;
 
       // Yıldız kayması
       starField.position.x += 0.009;
@@ -254,7 +256,6 @@
     }
     animate();
 
-    // Responsive
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
