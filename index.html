@@ -2,322 +2,264 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertan Nalça - AI Developer & Creator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>sertan nalça • uzay</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;display=swap');
+        
         body {
-            width: 100%;
-            height: 100vh;
+            font-family: 'Inter', system-ui, sans-serif;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #000;
         }
-
-        #canvas {
+        
+        canvas {
             display: block;
-            width: 100%;
-            height: 100%;
         }
-
-        .container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-            z-index: 10;
+        
+        .header-text {
+            font-size: 18px;
+            letter-spacing: 3px;
+            font-weight: 400;
         }
-
-        .content {
-            text-align: center;
-            color: white;
-            margin-bottom: 200px;
+        
+        .earth-container {
+            filter: drop-shadow(0 0 80px rgba(100, 200, 255, 0.6));
         }
-
-        h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(0, 200, 255, 0.5);
-        }
-
-        .subtitle {
-            font-size: 1.5rem;
-            color: #00c8ff;
-            letter-spacing: 1px;
-            font-weight: 300;
-        }
-
-        .buttons-container {
-            position: absolute;
-            bottom: 100px;
-            width: 90%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            pointer-events: auto;
-        }
-
-        .btn {
-            padding: 16px 24px;
-            font-size: 1.1rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            text-decoration: none;
-            backdrop-filter: blur(10px);
-        }
-
-        .btn:hover {
-            border-color: rgba(0, 200, 255, 0.8);
-            background: rgba(0, 200, 255, 0.1);
-            box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .btn svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .navbar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(10px);
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 20;
-            border-bottom: 1px solid rgba(0, 200, 255, 0.2);
-        }
-
-        .navbar-menu {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            cursor: pointer;
-        }
-
-        .navbar-menu span {
-            width: 100%;
-            height: 2px;
-            background: white;
-            border-radius: 2px;
-        }
-
-        .navbar-url {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
-            flex: 1;
-            text-align: center;
-        }
-
-        .navbar-icon {
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
+        
+        .orbit-svg {
+            animation: subtle-orbit 120s linear infinite;
         }
     </style>
 </head>
-<body>
-    <div class="navbar">
-        <div class="navbar-menu">
-            <span></span>
-            <span></span>
-            <span></span>
+<body class="bg-black text-white">
+    <!-- Yıldızlar için Canvas (tam ekran, interaktif) -->
+    <canvas id="stars" class="fixed inset-0 z-0 pointer-events-auto"></canvas>
+
+    <!-- İçerik katmanı -->
+    <div class="relative z-10 min-h-screen flex flex-col">
+        
+        <!-- Üst başlık - Fotoğraftaki NASA alanının yerine tam olarak istediğin gibi -->
+        <header class="flex items-center justify-between px-6 py-4 bg-black/80 backdrop-blur-lg border-b border-white/10 fixed top-0 left-0 right-0 z-50">
+            
+            <!-- Sol taraf: küçük "sertan nalça" -->
+            <div class="header-text text-white/90 tracking-[2px]">
+                sertan nalça
+            </div>
+            
+            <!-- Sağ taraf: renkli Instagram ve WhatsApp ikonları (küçük, gerçek ikonlar) -->
+            <div class="flex items-center gap-5">
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/" target="_blank" 
+                   class="transition-transform hover:scale-110 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#E1306C">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.849.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.33.56 2.463.292 6.81.234 8.09.222 8.47.222 12c0 3.53.012 3.91.07 5.19.268 4.347 2.403 6.48 6.76 6.738 1.28.058 1.688.072 4.947.072 3.26 0 3.667-.014 4.947-.072 4.358-.258 6.493-2.391 6.761-6.738.058-1.28.072-1.688.072-5.19 0-3.53-.012-3.91-.07-5.19C23.44 2.463 21.305.33 16.947.072 15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zm0 10.162a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                    </svg>
+                </a>
+                
+                <!-- WhatsApp -->
+                <a href="https://wa.me/" target="_blank" 
+                   class="transition-transform hover:scale-110 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#25D366">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.198.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.485-.888-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.355L0 21.997l1.395-5.1a9.813 9.813 0 01-1.29-5.226 9.887 9.887 0 0110.01-9.877 9.85 9.85 0 017.02 2.906 9.85 9.85 0 012.906 7.02 9.887 9.887 0 01-9.877 10.01z"/>
+                    </svg>
+                </a>
+            </div>
+        </header>
+
+        <!-- Dünya ve yörüngeler (fotoğraftaki gibi merkezde) -->
+        <div class="flex-1 flex items-center justify-center relative">
+            
+            <!-- Yörüngeler (beyaz, iç içe geçmiş, fotoğraftaki gibi) -->
+            <svg id="orbits" width="520" height="520" class="orbit-svg absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+                <!-- Yörünge 1 -->
+                <ellipse cx="260" cy="260" rx="240" ry="105" transform="rotate(-35 260 260)" fill="none" stroke="white" stroke-width="2" stroke-opacity="0.35"/>
+                <!-- Yörünge 2 -->
+                <ellipse cx="260" cy="260" rx="225" ry="135" transform="rotate(25 260 260)" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.3"/>
+                <!-- Yörünge 3 -->
+                <ellipse cx="260" cy="260" rx="255" ry="88" transform="rotate(-55 260 260)" fill="none" stroke="white" stroke-width="2" stroke-opacity="0.25"/>
+                <!-- Yörünge 4 -->
+                <ellipse cx="260" cy="260" rx="200" ry="155" transform="rotate(40 260 260)" fill="none" stroke="white" stroke-width="1.8" stroke-opacity="0.4"/>
+                <!-- Yörünge 5 (daha küçük, çapraz) -->
+                <ellipse cx="260" cy="260" rx="180" ry="115" transform="rotate(-15 260 260)" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.35"/>
+                <!-- Yörünge 6 (dış halka) -->
+                <ellipse cx="260" cy="260" rx="265" ry="95" transform="rotate(70 260 260)" fill="none" stroke="white" stroke-width="2" stroke-opacity="0.2"/>
+            </svg>
+
+            <!-- Dünya (fotoğraftaki gibi net, parlak, mavi-beyaz) -->
+            <div class="earth-container relative z-20">
+                <img id="earth" 
+                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/The_Earth_seen_from_Apollo_17.jpg/600px-The_Earth_seen_from_Apollo_17.jpg"
+                     alt="Earth"
+                     class="w-[380px] h-[380px] md:w-[420px] md:h-[420px] rounded-full object-cover border border-white/30 shadow-2xl">
+            </div>
         </div>
-        <div class="navbar-url">🔒 sertanalca-cell.github.io</div>
-        <div class="navbar-icon">⟳</div>
     </div>
 
-    <div class="container">
-        <div class="content">
-            <h1>Sertan Nalça</h1>
-            <p class="subtitle">AI Developer & Creator</p>
-        </div>
-
-        <div class="buttons-container">
-            <a href="#instagram" class="btn">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2m-.6 2c-1.7 0-3 1.3-3 3v8.4c0 1.7 1.3 3 3 3h8.4c1.7 0 3-1.3 3-3V7.8c0-1.7-1.3-3-3-3H7.2m9.6 1.5c.4 0 .8.4.8.8s-.4.8-.8.8-.8-.4-.8-.8.4-.8.8-.8m-5.2 1.3c3.1 0 5.6 2.5 5.6 5.6s-2.5 5.6-5.6 5.6-5.6-2.5-5.6-5.6 2.5-5.6 5.6-5.6m0 2c-1.9 0-3.6 1.6-3.6 3.6s1.6 3.6 3.6 3.6 3.6-1.6 3.6-3.6-1.6-3.6-3.6-3.6z"/>
-                </svg>
-                Instagram
-            </a>
-            <a href="#whatsapp" class="btn">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004c-1.574 0-3.088.615-4.236 1.728-1.148 1.113-1.78 2.588-1.78 4.153 0 1.747.92 3.361 2.537 4.286l-.36 1.286 1.468-.747c1.154.628 2.428.992 3.771.992h.004c1.574 0 3.088-.615 4.236-1.729 1.147-1.112 1.78-2.587 1.78-4.153 0-1.746-.92-3.36-2.537-4.286l.36-1.286-1.468.747a5.34 5.34 0 0 0-2.672-.688zM23 12c0 6.075-4.925 11-11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11z"/>
-                </svg>
-                WhatsApp
-            </a>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Scene Setup
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        // Tailwind script zaten yüklü, ekstra config gerekmez
+        const canvas = document.getElementById('stars')
+        const ctx = canvas.getContext('2d')
         
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x000000, 1);
-        document.body.appendChild(renderer.domElement);
-
-        camera.position.z = 3;
-
-        // Create Starfield
+        let stars = []
+        let width = window.innerWidth
+        let height = window.innerHeight
+        let cx = width / 2
+        let cy = height / 2
+        let angle = 0
+        let isDragging = false
+        let prevX = 0
+        let prevY = 0
+        
+        // Yıldız renkleri (sarı, mavi, beyaz - istediğin gibi)
+        const colors = ['#FFEE77', '#77DDFF', '#F8F8FF', '#AADDFF', '#FFFF99']
+        
         function createStars() {
-            const starsGeometry = new THREE.BufferGeometry();
-            const starCount = 1000;
-            const positions = new Float32Array(starCount * 3);
-
-            for (let i = 0; i < starCount * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 100;
-                positions[i + 1] = (Math.random() - 0.5) * 100;
-                positions[i + 2] = (Math.random() - 0.5) * 100;
+            stars = []
+            const count = Math.min(1200, Math.floor(width * height / 800)) // ekran boyutuna göre yoğunluk
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 2.2 + 0.4, // küçük nokta nokta
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    phase: Math.random() * Math.PI * 2 // parıldama için
+                })
             }
-
-            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-            const starsMaterial = new THREE.PointsMaterial({
-                color: 0xffffff,
-                size: 0.1,
-                sizeAttenuation: true
-            });
-
-            return new THREE.Points(starsGeometry, starsMaterial);
         }
-
-        const stars = createStars();
-        scene.add(stars);
-
-        // Create Earth
-        const geometry = new THREE.SphereGeometry(1, 64, 64);
-
-        // Create canvas texture for Earth
-        const canvas = document.createElement('canvas');
-        canvas.width = 2048;
-        canvas.height = 1024;
-        const ctx = canvas.getContext('2d');
-
-        // Fill ocean
-        ctx.fillStyle = '#0066cc';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Add continents (simplified)
-        ctx.fillStyle = '#00aa00';
         
-        // North America
-        ctx.beginPath();
-        ctx.ellipse(200, 300, 150, 200, -0.3, 0, Math.PI * 2);
-        ctx.fill();
-
-        // South America
-        ctx.beginPath();
-        ctx.ellipse(350, 500, 80, 150, 0.2, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Europe
-        ctx.beginPath();
-        ctx.ellipse(700, 250, 100, 80, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Africa
-        ctx.beginPath();
-        ctx.ellipse(850, 450, 120, 150, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Asia
-        ctx.beginPath();
-        ctx.ellipse(1200, 300, 200, 180, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Australia
-        ctx.beginPath();
-        ctx.ellipse(1400, 600, 70, 80, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Add glow effect with gradient
-        const gradient = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, 600);
-        gradient.addColorStop(0, 'rgba(0, 200, 255, 0.3)');
-        gradient.addColorStop(1, 'rgba(0, 100, 150, 0)');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        const texture = new THREE.CanvasTexture(canvas);
-        const material = new THREE.MeshPhongMaterial({ 
-            map: texture,
-            emissive: 0x00ccff,
-            emissiveIntensity: 0.3
-        });
-
-        const earth = new THREE.Mesh(geometry, material);
-        scene.add(earth);
-
-        // Add lighting
-        const light = new THREE.PointLight(0xffffff, 1.5);
-        light.position.set(5, 3, 5);
-        scene.add(light);
-
-        const ambientLight = new THREE.AmbientLight(0x404040, 1);
-        scene.add(ambientLight);
-
-        // Animation
-        function animate() {
-            requestAnimationFrame(animate);
-
-            // Rotate Earth
-            earth.rotation.y += 0.001;
-
-            // Rotate stars
-            stars.rotation.y += 0.0001;
-
-            renderer.render(scene, camera);
+        function resize() {
+            width = window.innerWidth
+            height = window.innerHeight
+            canvas.width = width
+            canvas.height = height
+            cx = width / 2
+            cy = height / 2
+            createStars()
         }
-
-        animate();
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Button interactions
-        document.querySelector('a[href="#instagram"]').addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Instagram profilinize yönlendirilecektir');
-        });
-
-        document.querySelector('a[href="#whatsapp"]').addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('WhatsApp\'a yönlendirilecektir');
-        });
+        
+        function draw() {
+            // Hafif trail efekti için siyah overlay (uzay derinliği hissi)
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)'
+            ctx.fillRect(0, 0, width, height)
+            
+            ctx.save()
+            ctx.translate(cx, cy)
+            ctx.rotate(angle)
+            
+            const time = Date.now() / 280
+            
+            for (let i = 0; i < stars.length; i++) {
+                const s = stars[i]
+                
+                // Parıldama efekti (uzayda gibi)
+                const alpha = 0.7 + Math.sin(time + s.phase) * 0.3
+                
+                // Her yıldızın orijinal pozisyonunu merkeze göre döndür
+                const dx = s.x - cx
+                const dy = s.y - cy
+                
+                const rotatedX = dx * Math.cos(angle) - dy * Math.sin(angle)
+                const rotatedY = dx * Math.sin(angle) + dy * Math.cos(angle)
+                
+                ctx.globalAlpha = alpha
+                ctx.fillStyle = s.color
+                
+                // Küçük nokta (gerçekçi yıldız)
+                ctx.beginPath()
+                ctx.arc(rotatedX, rotatedY, s.r, 0, Math.PI * 2)
+                ctx.fill()
+                
+                // Çok parlak yıldızlara ekstra parlak nokta
+                if (s.r > 1.8) {
+                    ctx.fillStyle = '#FFFFFF'
+                    ctx.globalAlpha = alpha * 0.6
+                    ctx.fillRect(rotatedX - 0.4, rotatedY - 0.4, 0.8, 0.8)
+                }
+            }
+            
+            ctx.restore()
+            ctx.globalAlpha = 1
+        }
+        
+        function animate() {
+            draw()
+            requestAnimationFrame(animate)
+        }
+        
+        // Mouse + Touch sürükleme (parmakla uzayı döndürme)
+        function startDrag(x, y) {
+            isDragging = true
+            prevX = x
+            prevY = y
+            canvas.style.cursor = 'grabbing'
+        }
+        
+        function drag(x, y) {
+            if (!isDragging) return
+            const deltaX = x - prevX
+            // Hassasiyet ayarı - daha doğal his için
+            angle += deltaX * 0.0035
+            prevX = x
+            prevY = y
+        }
+        
+        function endDrag() {
+            isDragging = false
+            canvas.style.cursor = 'grab'
+        }
+        
+        // Event listener'lar
+        function addListeners() {
+            // Mouse
+            canvas.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY))
+            window.addEventListener('mousemove', e => drag(e.clientX, e.clientY))
+            window.addEventListener('mouseup', endDrag)
+            window.addEventListener('mouseleave', endDrag)
+            
+            // Touch (mobil parmak desteği)
+            canvas.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) {
+                    e.preventDefault()
+                    startDrag(e.touches[0].clientX, e.touches[0].clientY)
+                }
+            })
+            window.addEventListener('touchmove', e => {
+                if (e.touches.length === 1 && isDragging) {
+                    e.preventDefault()
+                    drag(e.touches[0].clientX, e.touches[0].clientY)
+                }
+            })
+            window.addEventListener('touchend', endDrag)
+            
+            // Klavye ile de döndürme (isteğe bağlı)
+            let keyAngle = 0
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowLeft') keyAngle -= 0.02
+                if (e.key === 'ArrowRight') keyAngle += 0.02
+                angle += keyAngle
+            })
+        }
+        
+        // Başlat
+        function init() {
+            resize()
+            addListeners()
+            animate()
+            
+            // Pencere yeniden boyutlandığında
+            window.addEventListener('resize', () => {
+                resize()
+            })
+            
+            // Başlangıçta hafif bir açı ver (daha dinamik his)
+            angle = -0.3
+            
+            console.log('%c✅ Sertan Nalça uzay sitesi hazır! Arka planda yıldızları parmağınla (veya mouse ile) döndürerek uzayda olduğunu hissedebilirsin.', 'color:#77DDFF; font-family:monospace')
+        }
+        
+        // Sayfa yüklendiğinde çalıştır
+        window.onload = init
     </script>
 </body>
 </html>
