@@ -1,171 +1,199 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sertan Nalça</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sertan Nalça - AI Developer & Creator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000000;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    body {
-      height: 100vh;
-      background: #000000 url('https://picsum.photos/id/1015/1920/1080') center/cover;
-      background-size: cover;
-      color: white;
-      font-family: 'Inter', system-ui, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      position: relative;
-    }
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-    /* Yıldız efekti */
-    .stars {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: transparent;
-      box-shadow: 
-        50px 80px 1px #fff,
-        120px 200px 1px #fff,
-        300px 150px 1px #fff,
-        450px 300px 1px #fff,
-        600px 80px 1px #fff,
-        750px 250px 1px #fff,
-        900px 120px 1px #fff,
-        1100px 350px 1px #fff;
-      opacity: 0.6;
-      animation: twinkle 8s infinite alternate;
-      pointer-events: none;
-      z-index: 1;
-    }
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: fall 8s linear infinite;
+        }
 
-    @keyframes twinkle {
-      0% { opacity: 0.5; }
-      100% { opacity: 0.9; }
-    }
+        @keyframes fall {
+            to {
+                transform: translate(100vw, 100vh);
+                opacity: 0;
+            }
+        }
 
-    .content {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-    }
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
 
-    h1 {
-      font-size: 3.6rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      text-shadow: 0 0 30px rgba(150, 200, 255, 0.9);
-    }
+        h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
 
-    .subtitle {
-      font-size: 1.4rem;
-      color: #b0c0ff;
-      margin-bottom: 70px;
-      letter-spacing: 2px;
-    }
+        .subtitle {
+            font-size: 1.2em;
+            color: #b0b0b0;
+            margin-bottom: 30px;
+        }
 
-    /* Dönen Dünya */
-    .earth-container {
-      width: 290px;
-      height: 290px;
-      margin: 0 auto 80px;
-      perspective: 1000px;
-    }
+        #earth {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #4da6ff, #00cc99, #003d33);
+            box-shadow: 0 0 60px rgba(76, 175, 80, 0.5), 0 0 100px rgba(0, 204, 153, 0.3);
+            margin: 40px 0;
+            animation: earthRotate 20s linear infinite;
+            position: relative;
+        }
 
-    .earth {
-      width: 100%;
-      height: 100%;
-      background: url('https://i.imgur.com/2vK8z3L.png') center/cover; /* Glowing yeşil devreli dünya */
-      border-radius: 50%;
-      box-shadow: 
-        0 0 70px rgba(0, 255, 120, 0.8),
-        0 0 140px rgba(80, 180, 255, 0.6),
-        inset 0 0 60px rgba(255,255,255,0.2);
-      animation: rotateEarth 35s linear infinite;
-      border: 3px solid rgba(0, 255, 180, 0.4);
-    }
+        @keyframes earthRotate {
+            0% {
+                transform: rotateY(0deg) rotateX(20deg);
+            }
+            100% {
+                transform: rotateY(360deg) rotateX(20deg);
+            }
+        }
 
-    @keyframes rotateEarth {
-      from { transform: rotateY(0deg); }
-      to   { transform: rotateY(360deg); }
-    }
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
 
-    .buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      width: 340px;
-      z-index: 2;
-    }
+        .btn {
+            padding: 12px 24px;
+            border: 2px solid #444;
+            background: rgba(20, 20, 20, 0.8);
+            color: white;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 40px;
+        }
 
-    .btn {
-      padding: 16px 24px;
-      border-radius: 50px;
-      font-size: 1.12rem;
-      font-weight: 600;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      transition: all 0.3s ease;
-    }
+        .btn:hover {
+            border-color: #00cc99;
+            background: rgba(0, 204, 153, 0.1);
+            box-shadow: 0 0 20px rgba(0, 204, 153, 0.3);
+        }
 
-    .btn-instagram {
-      background: rgba(255,255,255,0.1);
-      color: white;
-      border: 1.5px solid rgba(255,255,255,0.4);
-    }
+        .btn-icon {
+            font-size: 1.2em;
+        }
 
-    .btn-instagram:hover {
-      background: rgba(255,255,255,0.2);
-      transform: translateY(-3px);
-    }
+        .instagram-icon {
+            width: 20px;
+            height: 20px;
+        }
 
-    .btn-whatsapp {
-      background: #25D366;
-      color: white;
-    }
-
-    .btn-whatsapp:hover {
-      background: #20c35e;
-      transform: translateY(-3px);
-    }
-
-    .icon {
-      width: 26px;
-      height: 26px;
-    }
-  </style>
+        .whatsapp-icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
 </head>
 <body>
-
-  <div class="stars"></div>
-
-  <div class="content">
-    <h1>Sertan Nalça</h1>
-    <p class="subtitle">AI Developer & Creator</p>
-
-    <div class="earth-container">
-      <div class="earth"></div>
+    <div id="stars-container"></div>
+    
+    <div class="container">
+        <h1>Sertan Nalça</h1>
+        <p class="subtitle">AI Developer & Creator</p>
+        
+        <div id="earth"></div>
+        
+        <div class="buttons-container">
+            <a href="https://instagram.com/sertanalca" target="_blank" class="btn">
+                <span class="btn-icon">📷</span>
+                <span>Instagram</span>
+            </a>
+            <a href="https://wa.me/355692033673" target="_blank" class="btn">
+                <span class="btn-icon">💬</span>
+                <span>WhatsApp +355692033673</span>
+            </a>
+        </div>
     </div>
 
-    <div class="buttons">
-      <a href="https://www.instagram.com/sertanalca" target="_blank" class="btn btn-instagram">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" class="icon">
-        Instagram
-      </a>
-      
-      <a href="https://wa.me/355692033673" target="_blank" class="btn btn-whatsapp">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="icon">
-        WhatsApp
-      </a>
-    </div>
-  </div>
-
+    <script>
+        const starsContainer = document.getElementById('stars-container');
+        
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // Random starting position from top-left
+            const startX = Math.random() * window.innerWidth * 0.5;
+            const startY = Math.random() * window.innerHeight * 0.5;
+            
+            star.style.left = startX + 'px';
+            star.style.top = startY + 'px';
+            star.style.opacity = Math.random() * 0.7 + 0.3;
+            star.style.width = (Math.random() * 2 + 1) + 'px';
+            star.style.height = star.style.width;
+            
+            const duration = Math.random() * 6 + 4;
+            star.style.animationDuration = duration + 's';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            
+            starsContainer.appendChild(star);
+            
+            setTimeout(() => {
+                star.remove();
+            }, (duration + 5) * 1000);
+        }
+        
+        // Create stars continuously
+        setInterval(createStar, 200);
+        
+        // Create initial stars
+        for (let i = 0; i < 30; i++) {
+            setTimeout(createStar, i * 100);
+        }
+    </script>
 </body>
 </html>
