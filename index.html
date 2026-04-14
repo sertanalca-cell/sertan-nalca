@@ -1,341 +1,193 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sertan Nalça</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <style>
-    body { margin: 0; overflow: hidden; background: #000; font-family: 'Arial', sans-serif; }
-    canvas { display: block; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sertan Nalça</title>
 
-    .overlay {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'Georgia', serif;
+  background: black;
+}
 
-    h1 {
-      margin-top: 8%;
-      font-size: 4rem;
-      color: #ffffff;
-      text-shadow: 
-        0 0 15px #00ffff,
-        0 0 30px #00ffff,
-        0 0 45px #00ffff;
-      letter-spacing: -2px;
-      pointer-events: none;
-    }
+#bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
 
-    .subtitle {
-      margin-top: 10px;
-      font-size: 1.6rem;
-      color: #a0f8ff;
-      text-shadow: 0 0 20px #00ffff;
-      opacity: 1;
-      transition: opacity 1.2s ease-in-out;
-      pointer-events: none;
-      min-height: 2.2rem;
-    }
+.content {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 10%;
+  color: white;
+}
 
-    .buttons {
-      position: absolute;
-      bottom: 12%;
-      display: flex;
-      gap: 25px;
-      pointer-events: all;
-    }
+h1 {
+  font-size: 40px;
+}
 
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 16px 38px;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: white;
-      border: none;
-      border-radius: 9999px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 
-        0 0 20px 4px #00ffff,
-        0 8px 20px rgba(0, 255, 255, 0.4);
-      text-decoration: none;
-      pointer-events: all;
-    }
+.subtitle {
+  font-size: 18px;
+  color: #caa7ff;
+  transition: opacity 1s;
+}
 
-    .btn:hover {
-      transform: scale(1.08);
-      box-shadow: 
-        0 0 30px 8px #00ffff,
-        0 12px 30px rgba(0, 255, 255, 0.6);
-    }
+.buttons {
+  position: absolute;
+  bottom: 80px;
+  width: 100%;
+}
 
-    .instagram {
-      background: linear-gradient(90deg, #f56040, #c13584, #833ab4);
-    }
+.btn {
+  width: 80%;
+  margin: 10px auto;
+  padding: 15px;
+  border-radius: 25px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 18px;
+  border: 1px solid rgba(255,255,255,0.2);
+  position: relative;
+  overflow: hidden;
+}
 
-    .whatsapp {
-      background: linear-gradient(90deg, #25d366, #128c7e);
-    }
+.orbit {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  animation: orbit 4s linear infinite;
+}
 
-    .icon {
-      font-size: 1.6rem;
-    }
-  </style>
+@keyframes orbit {
+  0% { transform: rotate(0deg) translateX(100px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+}
+</style>
 </head>
+
 <body>
 
-  <div class="overlay">
-    <h1>Sertan Nalça</h1>
-    <div class="subtitle" id="subtitle">AI Developer</div>
+<canvas id="bg"></canvas>
 
-    <div class="buttons">
-      <!-- Instagram -->
-      <a href="https://www.instagram.com/sertanalca/" target="_blank" class="btn instagram">
-        <span class="icon">📸</span>
-        sertanalca
-      </a>
-      
-      <!-- WhatsApp -->
-      <a href="https://wa.me/355692033673" target="_blank" class="btn whatsapp">
-        <span class="icon">💬</span>
-        +355 69 203 3673
-      </a>
-    </div>
+<div class="content">
+  <h1>Sertan Nalça</h1>
+  <div class="subtitle" id="subtitle">AI Developer & Creator</div>
+</div>
+
+<div class="buttons">
+  <div class="btn" onclick="window.location='https://instagram.com/sertanalca'">
+    Instagram
+    <div class="orbit"></div>
   </div>
 
-  <script>
-    // ====================== SCENE SETUP ======================
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    document.body.appendChild(renderer.domElement);
+  <div class="btn" onclick="window.location='https://wa.me/355692033673'">
+    WhatsApp
+    <div class="orbit"></div>
+  </div>
+</div>
 
-    camera.position.set(0, 0, 5);
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
-    // Işıklar
-    scene.add(new THREE.AmbientLight(0x404060, 1.2));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);
-    dirLight.position.set(8, 5, 10);
-    scene.add(dirLight);
+<script>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 
-    // ====================== DÜNYA (küçük) ======================
-    const earthRadius = 0.85;
-    const earthGeo = new THREE.SphereGeometry(earthRadius, 64, 64);
-    
-    const earthMap = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
-    const earthNormal = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_normal_2048.jpg');
-    const earthSpecular = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_specular_2048.jpg');
+const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('bg')});
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-    const earthMat = new THREE.MeshPhongMaterial({
-      map: earthMap,
-      bumpMap: earthNormal,
-      bumpScale: 0.08,
-      specularMap: earthSpecular,
-      specular: 0x222222,
-      shininess: 8
-    });
+camera.position.z = 5;
 
-    const earth = new THREE.Mesh(earthGeo, earthMat);
-    scene.add(earth);
+// 🌍 Dünya
+const textureLoader = new THREE.TextureLoader();
 
-    // Atmosfer glow
-    const atmGeo = new THREE.SphereGeometry(earthRadius * 1.08, 64, 64);
-    const atmMat = new THREE.MeshPhongMaterial({
-      color: 0x00ddff,
-      transparent: true,
-      opacity: 0.18,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide
-    });
-    const atmosphere = new THREE.Mesh(atmGeo, atmMat);
-    earth.add(atmosphere);
+const earth = new THREE.Mesh(
+  new THREE.SphereGeometry(1, 64, 64),
+  new THREE.MeshStandardMaterial({
+    map: textureLoader.load('https://threejs.org/examples/textures/earth_atmos_2048.jpg'),
+    roughness: 1,
+    metalness: 0
+  })
+);
 
-    // ====================== GERÇEK AY ======================
-    const moonRadius = 0.22;
-    const moonGeo = new THREE.SphereGeometry(moonRadius, 48, 48);
-    
-    const moonMap = new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/lroc_color_poles_1k.jpg');
-    const moonBump = new THREE.TextureLoader().load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/17271/ldem_3_8bit.jpg');
+scene.add(earth);
 
-    const moonMat = new THREE.MeshPhongMaterial({
-      map: moonMap,
-      bumpMap: moonBump,
-      bumpScale: 0.12,
-      shininess: 2
-    });
+// 🌙 Ay
+const moon = new THREE.Mesh(
+  new THREE.SphereGeometry(0.27, 32, 32),
+  new THREE.MeshStandardMaterial({
+    map: textureLoader.load('https://threejs.org/examples/textures/moon_1024.jpg')
+  })
+);
 
-    const moon = new THREE.Mesh(moonGeo, moonMat);
-    scene.add(moon);
+scene.add(moon);
 
-    // ====================== ISS (çok küçük, net şekil) ======================
-    const issGroup = new THREE.Group();
-    scene.add(issGroup);
+// 💡 Işık (güneş etkisi)
+const light = new THREE.PointLight(0xffffff, 1.5);
+light.position.set(5, 3, 5);
+scene.add(light);
 
-    // ISS gövdesi
-    const bodyGeo = new THREE.BoxGeometry(0.18, 0.08, 0.08);
-    const bodyMat = new THREE.MeshPhongMaterial({ color: 0xdddddd, shininess: 30 });
-    const body = new THREE.Mesh(bodyGeo, bodyMat);
-    issGroup.add(body);
+// ⭐ yıldızlar
+const starsGeometry = new THREE.BufferGeometry();
+const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff });
 
-    // Solar paneller (2 tane)
-    const panelGeo = new THREE.BoxGeometry(0.45, 0.02, 0.12);
-    const panelMat = new THREE.MeshPhongMaterial({ color: 0x112233, shininess: 10 });
-    const panel1 = new THREE.Mesh(panelGeo, panelMat);
-    panel1.position.set(0, 0, 0.13);
-    issGroup.add(panel1);
-    const panel2 = panel1.clone();
-    panel2.position.set(0, 0, -0.13);
-    issGroup.add(panel2);
+const starVertices = [];
+for (let i = 0; i < 10000; i++) {
+  starVertices.push((Math.random() - 0.5) * 2000);
+  starVertices.push((Math.random() - 0.5) * 2000);
+  starVertices.push((Math.random() - 0.5) * 2000);
+}
 
-    // ====================== YILDIZLAR (çok uzakta, sol üst → sağ alt) ======================
-    const starsCount = 12000;
-    const starsGeo = new THREE.BufferGeometry();
-    const posArray = new Float32Array(starsCount * 3);
-    const colorArray = new Float32Array(starsCount * 3);
+starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+const stars = new THREE.Points(starsGeometry, starsMaterial);
+scene.add(stars);
 
-    for (let i = 0; i < starsCount * 3; i += 3) {
-      posArray[i]     = (Math.random() - 0.5) * 280;
-      posArray[i + 1] = (Math.random() - 0.5) * 280;
-      posArray[i + 2] = (Math.random() - 0.5) * 280 - 80; // daha uzakta
+// 🌌 animasyon
+let angle = 0;
 
-      const brightness = Math.random() * 0.7 + 0.3;
-      colorArray[i] = brightness;
-      colorArray[i + 1] = brightness;
-      colorArray[i + 2] = brightness;
+function animate() {
+  requestAnimationFrame(animate);
+
+  // dünya dönüyor
+  earth.rotation.y += 0.002;
+
+  // ay dünya etrafında dönüyor
+  angle += 0.01;
+  moon.position.set(Math.sin(angle) * 2, 0, Math.cos(angle) * 2);
+
+  // yıldız akışı (cosmos hissi)
+  stars.position.z += 0.1;
+  if (stars.position.z > 100) stars.position.z = 0;
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+// ✨ yazı döngüsü
+const subtitle = document.getElementById("subtitle");
+
+setInterval(() => {
+  subtitle.style.opacity = 0;
+
+  setTimeout(() => {
+    if (subtitle.innerText === "AI Developer & Creator") {
+      subtitle.innerText = "I'm creating something amazing for everyone";
+    } else {
+      subtitle.innerText = "AI Developer & Creator";
     }
+    subtitle.style.opacity = 1;
+  }, 1000);
 
-    starsGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    starsGeo.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+}, 5000);
 
-    const starsMat = new THREE.PointsMaterial({
-      size: 0.12,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.95,
-      blending: THREE.AdditiveBlending
-    });
+</script>
 
-    const starField = new THREE.Points(starsGeo, starsMat);
-    scene.add(starField);
-
-    // ====================== METİN DÖNGÜSÜ ======================
-    const subtitleEl = document.getElementById('subtitle');
-    const texts = [
-      "AI Developer",
-      "I'm new coder",
-      "I'm creating something amazing for all"
-    ];
-    let index = 0;
-
-    function cycleText() {
-      subtitleEl.style.opacity = 0;
-      
-      setTimeout(() => {
-        index = (index + 1) % texts.length;
-        subtitleEl.textContent = texts[index];
-        subtitleEl.style.opacity = 1;
-      }, 800);
-    }
-
-    // İlk 3 saniye sonra başla
-    setTimeout(() => {
-      cycleText();
-      setInterval(cycleText, 3200); // her 3.2 saniyede bir döngü (fade + gösterim)
-    }, 3000);
-
-    // ====================== FAREYLE DÜNYA DÖNDÜRME (dokununca kendin döndür, bırakınca devam etsin) ======================
-    let isDragging = false;
-    let previousMouseX = 0;
-    let previousMouseY = 0;
-    let velocityX = 0;
-    let velocityY = 0;
-
-    const onMouseDown = (e) => {
-      isDragging = true;
-      previousMouseX = e.clientX;
-      previousMouseY = e.clientY;
-      velocityX = 0;
-      velocityY = 0;
-    };
-
-    const onMouseMove = (e) => {
-      if (!isDragging) return;
-      const deltaX = e.clientX - previousMouseX;
-      const deltaY = e.clientY - previousMouseY;
-
-      earth.rotation.y += deltaX * 0.005;
-      earth.rotation.x += deltaY * 0.005;
-
-      velocityX = deltaX * 0.008;
-      velocityY = deltaY * 0.008;
-
-      previousMouseX = e.clientX;
-      previousMouseY = e.clientY;
-    };
-
-    const onMouseUp = () => { isDragging = false; };
-
-    renderer.domElement.addEventListener('mousedown', onMouseDown);
-    renderer.domElement.addEventListener('mousemove', onMouseMove);
-    renderer.domElement.addEventListener('mouseup', onMouseUp);
-    renderer.domElement.addEventListener('mouseleave', onMouseUp);
-
-    // ====================== ANİMASYON ======================
-    let time = 0;
-
-    function animate() {
-      requestAnimationFrame(animate);
-      time += 0.008;
-
-      // Dünya otomatik yavaş dönüyor + inertia
-      earth.rotation.y += 0.0006 + velocityY * 0.92;
-      earth.rotation.x += velocityX * 0.92;
-
-      // Inertia yavaşlasın
-      velocityX *= 0.92;
-      velocityY *= 0.92;
-
-      // Ay yavaşça dönüyor (gerçek yörünge)
-      const moonDist = 2.45;
-      moon.position.x = Math.cos(time * 0.4) * moonDist;
-      moon.position.z = Math.sin(time * 0.4) * moonDist;
-      moon.position.y = Math.sin(time * 0.15) * 0.3; // hafif eğim
-      moon.rotation.y = time * 0.6;
-
-      // ISS daha hızlı ve yakın yörüngede
-      const issDist = 1.65;
-      issGroup.position.x = Math.cos(time * 1.8) * issDist;
-      issGroup.position.z = Math.sin(time * 1.8) * issDist;
-      issGroup.position.y = Math.sin(time * 0.9) * 0.4;
-      issGroup.rotation.y = time * 3; // kendi etrafında da dönüyor
-
-      // Yıldızlar yavaşça sol üst → sağ alt kayıyor
-      starField.position.x += 0.012;
-      starField.position.y -= 0.012;
-      if (starField.position.x > 50) starField.position.x = -50;
-      if (starField.position.y < -50) starField.position.y = 50;
-
-      renderer.render(scene, camera);
-    }
-
-    animate();
-
-    // ====================== RESPONSIVE ======================
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
 </body>
 </html>
