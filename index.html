@@ -1,203 +1,130 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Universe Center</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<style>
-body{
-  margin:0;
-  overflow:hidden;
-  background:black;
-  font-family:Arial;
-  color:white;
-}
-
-/* CANVAS */
-#bg{
-  position:fixed;
-  top:0;
-  left:0;
-}
-
-/* GALAXY */
-#space{
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:url("https://upload.wikimedia.org/wikipedia/commons/3/3f/Milky_Way_IR_Spitzer.jpg");
-  background-size:cover;
-  opacity:0.35;
-  z-index:-2;
-}
-
-/* STAR */
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  opacity:0.7;
-}
-
-/* PROFILE */
-#profile{
-  position:absolute;
-  top:20px;
-  left:20px;
-}
-
-#profile img{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  border:2px solid white;
-  object-fit:cover;
-  cursor:pointer;
-}
-
-/* INFO */
-#info{
-  position:absolute;
-  bottom:120px;
-  width:100%;
-  text-align:center;
-}
-
-.box{
-  display:inline-block;
-  padding:10px 18px;
-  margin:5px;
-  border-radius:12px;
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(10px);
-}
-
-/* ADMIN */
-#admin{
-  display:none;
-  position:absolute;
-  top:20px;
-  right:20px;
-  background:rgba(0,0,0,0.8);
-  padding:10px;
-  border-radius:10px;
-}
-input{width:160px;margin:5px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sertan - Digital Identity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0033 50%, #330033 100%);
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .link-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .link-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 
+                        0 0 15px rgba(168, 85, 247, 0.5);
+        }
+        
+        .profile-img {
+            transition: all 0.4s ease;
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.08) rotate(3deg);
+        }
+    </style>
 </head>
+<body class="gradient-bg min-h-screen text-white flex items-center justify-center py-12 px-4">
+    <div class="max-w-md w-full mx-auto">
+        <!-- Kart -->
+        <div class="glass rounded-3xl p-8 shadow-2xl text-center">
+            
+            <!-- Profil Fotoğrafı -->
+            <div class="relative mx-auto w-32 h-32 mb-6">
+                <img id="profilePhoto" 
+                     src="https://via.placeholder.com/300" 
+                     alt="Profil Fotoğrafı" 
+                     class="profile-img w-32 h-32 rounded-2xl object-cover border-4 border-white/30 shadow-xl">
+                <!-- Hafif glow halka -->
+                <div class="absolute inset-0 rounded-2xl border border-purple-500/30 animate-pulse"></div>
+            </div>
 
-<body>
+            <!-- İsim ve Unvan -->
+            <h1 id="name" class="text-4xl font-bold tracking-tight mb-1">Sertan</h1>
+            <p id="title" class="text-purple-300 text-xl font-medium mb-3">AI Developer & Creator</p>
+            
+            <!-- Bio -->
+            <p id="bio" class="text-gray-300 text-base leading-relaxed mb-8 max-w-xs mx-auto">
+                AI ile web ve mobil uygulamalar geliştiriyorum. 
+                Fikirleri hızlıca gerçeğe dönüştürüyorum.
+            </p>
 
-<div id="space"></div>
+            <!-- Sosyal İkonlar -->
+            <div class="flex justify-center gap-6 mb-10 text-2xl">
+                <a href="https://instagram.com/seninhesabin" target="_blank" class="hover:text-pink-400 transition-colors"><i class="fab fa-instagram"></i></a>
+                <a href="https://x.com/seninhesabin" target="_blank" class="hover:text-sky-400 transition-colors"><i class="fab fa-x-twitter"></i></a>
+                <a href="https://linkedin.com/in/seninhesabin" target="_blank" class="hover:text-blue-400 transition-colors"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/seninhesabin" target="_blank" class="hover:text-gray-300 transition-colors"><i class="fab fa-github"></i></a>
+                <a href="https://wa.me/905xxxxxxxxx" target="_blank" class="hover:text-green-400 transition-colors"><i class="fab fa-whatsapp"></i></a>
+            </div>
 
-<canvas id="bg"></canvas>
+            <!-- Link Butonları -->
+            <div class="space-y-4">
+                <a href="https://seninwebsiten.com" target="_blank" 
+                   class="link-btn block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium py-4 px-6 rounded-2xl text-lg flex items-center justify-center gap-3">
+                    <i class="fas fa-globe"></i>
+                    <span>Web Sitesim</span>
+                </a>
+                
+                <a href="https://seninportfolio.com" target="_blank" 
+                   class="link-btn block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium py-4 px-6 rounded-2xl text-lg flex items-center justify-center gap-3">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Portfolio</span>
+                </a>
+                
+                <a href="https://seninemergentprojeleri.com" target="_blank" 
+                   class="link-btn block bg-white/10 hover:bg-white/20 border border-white/20 text-white font-medium py-4 px-6 rounded-2xl text-lg flex items-center justify-center gap-3">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Projelerim</span>
+                </a>
+                
+                <!-- Buraya yeni buton eklemek çok kolay -->
+                <!-- Örnek: 
+                <a href="URL" target="_blank" class="link-btn block ..."> ... </a>
+                -->
+            </div>
+        </div>
 
-<div id="profile">
-  <img id="pfp" onclick="openAdmin()">
-</div>
+        <!-- Footer -->
+        <p class="text-center text-white/40 text-xs mt-8">
+            Made with ❤️ for Instagram
+        </p>
+    </div>
 
-<div id="info">
-  <div class="box">Sertan Nalça</div><br>
-  <div class="box">+355692033673</div>
-</div>
-
-<div id="admin">
-  <input type="file" id="file"><br>
-  <input id="pass" placeholder="Password"><br>
-</div>
-
-<script>
-
-/* STAR FIELD */
-for(let i=0;i<200;i++){
-  let s=document.createElement("div");
-  s.className="star";
-  s.style.left=Math.random()*100+"vw";
-  s.style.top=Math.random()*100+"vh";
-  document.body.appendChild(s);
-}
-
-/* THREE JS */
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
-
-const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("bg"),alpha:true});
-renderer.setSize(innerWidth,innerHeight);
-
-/* CAMERA closer for BIG objects */
-camera.position.z = 2.5;
-
-/* 🌌 GALAXY SPHERE */
-const galaxy = new THREE.Mesh(
-  new THREE.SphereGeometry(60,32,32),
-  new THREE.MeshBasicMaterial({
-    map:new THREE.TextureLoader().load("https://upload.wikimedia.org/wikipedia/commons/3/3f/Milky_Way_IR_Spitzer.jpg"),
-    side:THREE.BackSide
-  })
-);
-scene.add(galaxy);
-
-/* 🌍 EARTH BIG CENTER */
-const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(1.8,64,64),
-  new THREE.MeshBasicMaterial({
-    map:new THREE.TextureLoader().load("https://threejs.org/examples/textures/earth_atmos_2048.jpg")
-  })
-);
-scene.add(earth);
-
-/* 🌙 MOON BIG + CLEAR */
-const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(0.6,32,32),
-  new THREE.MeshBasicMaterial({
-    map:new THREE.TextureLoader().load("https://threejs.org/examples/textures/moon_1024.jpg")
-  })
-);
-scene.add(moon);
-
-/* ANIMATION */
-function animate(){
-  requestAnimationFrame(animate);
-
-  earth.rotation.y += 0.002;
-
-  /* BIG ORBIT AROUND EARTH */
-  moon.position.x = Math.sin(Date.now()*0.001)*3;
-  moon.position.z = Math.cos(Date.now()*0.001)*3;
-
-  renderer.render(scene,camera);
-}
-animate();
-
-/* PROFILE UPLOAD */
-document.getElementById("file").onchange = function(e){
-  let r = new FileReader();
-  r.onload = function(){
-    localStorage.setItem("pfp",r.result);
-    load();
-  }
-  r.readAsDataURL(e.target.files[0]);
-};
-
-/* ADMIN */
-function openAdmin(){
-  let p = prompt("Password:");
-  if(p==="Sertan2906"){
-    admin.style.display="block";
-  }
-}
-
-/* LOAD */
-function load(){
-  pfp.src = localStorage.getItem("pfp") || "https://i.imgur.com/8Km9tLL.png";
-}
-load();
-
-</script>
-
+    <script>
+        // Buradan kolayca bilgilerini değiştir:
+        document.getElementById('name').textContent = "Sertan";
+        document.getElementById('title').textContent = "AI Developer & Creator";
+        document.getElementById('bio').textContent = "AI ile web ve mobil uygulamalar geliştiriyorum. Fikirleri hızlıca gerçeğe dönüştürüyorum.";
+        
+        // Profil fotoğrafını değiştir (kendi fotoğraf linkini koy):
+        document.getElementById('profilePhoto').src = "https://via.placeholder.com/300"; // ← buraya kendi fotoğraf URL'ni yaz
+    </script>
 </body>
 </html>
