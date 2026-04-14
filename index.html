@@ -14,7 +14,7 @@
     body {
       background: #000;
       color: white;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow: hidden;
       height: 100vh;
       display: flex;
@@ -22,102 +22,117 @@
       align-items: center;
       justify-content: center;
       position: relative;
+      padding: 20px;
     }
 
-    /* Yıldızlar - Soldan sağa hareket */
+    /* Arka plan yıldızları - Sol üstten sağ alta hareket */
     .stars {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: transparent;
       overflow: hidden;
       z-index: 1;
+      pointer-events: none;
     }
 
     .star {
       position: absolute;
-      background: white;
+      background: #fff;
       border-radius: 50%;
-      animation: moveStars linear infinite;
+      box-shadow: 0 0 6px rgba(255,255,255,0.9);
+      animation: moveDiagonal linear infinite;
     }
 
-    @keyframes moveStars {
-      from { transform: translateX(-100px); }
-      to { transform: translateX(calc(100vw + 100px)); }
+    @keyframes moveDiagonal {
+      0% {
+        transform: translate(-100px, -100px);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translate(calc(100vw + 100px), calc(100vh + 100px));
+        opacity: 0.9;
+      }
     }
 
     /* Dünya ve yörüngesi */
     .earth-container {
       position: relative;
-      width: 220px;
-      height: 220px;
-      margin: 40px 0;
+      width: 200px;
+      height: 200px;
+      margin: 30px 0 50px;
       z-index: 2;
     }
 
     .earth {
-      width: 220px;
-      height: 220px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
-      background: url('https://i.ibb.co/0jZxK8z/earth-digital.png') center/cover no-repeat;
-      box-shadow: 0 0 60px rgba(0, 255, 255, 0.6),
-                  0 0 120px rgba(0, 100, 255, 0.3);
-      animation: earthGlow 8s ease-in-out infinite alternate;
+      background: url('https://i.ibb.co/0jZxK8z/earth-digital.png') center/cover;
+      box-shadow: 
+        0 0 40px rgba(80, 200, 255, 0.8),
+        0 0 80px rgba(0, 150, 255, 0.4);
+      animation: earthPulse 6s ease-in-out infinite alternate;
     }
 
-    /* Dünya etrafındaki dönen noktalar */
+    @keyframes earthPulse {
+      from { box-shadow: 0 0 40px rgba(80, 200, 255, 0.8); }
+      to { box-shadow: 0 0 70px rgba(100, 220, 255, 1); }
+    }
+
     .orbit {
       position: absolute;
       top: 50%;
       left: 50%;
+      width: 260px;
+      height: 260px;
       transform: translate(-50%, -50%);
-      width: 280px;
-      height: 280px;
       border-radius: 50%;
-      pointer-events: none;
     }
 
     .orbit-dot {
       position: absolute;
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       background: white;
       border-radius: 50%;
-      box-shadow: 0 0 12px white;
-      animation: orbitRotate linear infinite;
+      box-shadow: 0 0 10px white;
+      animation: orbitSpin linear infinite;
     }
 
-    @keyframes orbitRotate {
-      from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
-      to { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
+    @keyframes orbitSpin {
+      from { transform: rotate(0deg) translateX(130px) rotate(0deg); }
+      to { transform: rotate(360deg) translateX(130px) rotate(-360deg); }
     }
 
     /* Metinler */
     h1 {
-      font-size: 4.5rem;
+      font-size: 2.8rem;
       font-weight: 700;
       text-align: center;
       z-index: 3;
-      margin-bottom: 10px;
-      text-shadow: 0 0 30px rgba(255,255,255,0.8);
+      line-height: 1.1;
+      margin-bottom: 8px;
+      text-shadow: 0 0 25px rgba(255,255,255,0.7);
     }
 
     p {
-      font-size: 1.4rem;
+      font-size: 1.15rem;
       color: #a0d8ff;
-      letter-spacing: 4px;
-      margin-bottom: 60px;
+      letter-spacing: 3px;
+      text-align: center;
       z-index: 3;
+      margin-bottom: 40px;
     }
 
     /* Butonlar */
     .buttons {
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      width: 380px;
+      gap: 16px;
+      width: 100%;
+      max-width: 340px;
       z-index: 3;
     }
 
@@ -125,105 +140,112 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
-      padding: 18px 28px;
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(12px);
+      padding: 16px 24px;
       border-radius: 50px;
       text-decoration: none;
       color: white;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       font-weight: 500;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: all 0.4s ease;
     }
 
     .btn:hover {
-      background: rgba(255,255,255,0.15);
-      transform: translateY(-4px);
-      box-shadow: 0 10px 30px rgba(0, 200, 255, 0.3);
+      background: rgba(255,255,255,0.18);
+      transform: translateY(-3px);
     }
 
     .btn img {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
+    }
+
+    /* Mobil optimizasyon */
+    @media (max-width: 480px) {
+      h1 { font-size: 2.4rem; }
+      .earth-container { width: 170px; height: 170px; margin: 25px 0 40px; }
+      .earth { width: 170px; height: 170px; }
+      .orbit { width: 220px; height: 220px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Arka plan yıldızları -->
   <div class="stars" id="stars"></div>
 
   <h1>Sertan Nalça</h1>
   <p>AI DEVELOPER & CREATOR</p>
 
   <div class="earth-container">
-    <div class="earth" id="earth"></div>
-    
-    <!-- Dönme yörüngesi -->
+    <div class="earth"></div>
     <div class="orbit" id="orbit"></div>
   </div>
 
   <div class="buttons">
-    <a href="https://instagram.com" target="_blank" class="btn">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+    <a href="https://www.instagram.com" target="_blank" class="btn">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="IG">
       Instagram
     </a>
     <a href="https://wa.me" target="_blank" class="btn">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA">
       WhatsApp
     </a>
   </div>
 
   <script>
-    // Arka plan yıldızlarını oluştur (soldan sağa hareket)
+    // Sol üstten sağ alta hareket eden yıldızlar
     function createStars() {
-      const starsContainer = document.getElementById('stars');
-      
-      for (let i = 0; i < 250; i++) {
+      const container = document.getElementById('stars');
+      const starCount = 180; // Telefon için optimize edildi
+
+      for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
         star.className = 'star';
-        
-        const size = Math.random() * 3.5 + 1;
+
+        const size = Math.random() * 3 + 1.2;
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
-        
-        star.style.top = `${Math.random() * 100}vh`;
-        star.style.left = `${Math.random() * -50}px`;
-        
-        const duration = Math.random() * 25 + 35; // 35-60 saniye arası
+
+        // Rastgele başlangıç pozisyonu (sol üst tarafa yakın)
+        star.style.left = `${Math.random() * 60 - 20}vw`;
+        star.style.top = `${Math.random() * 40 - 20}vh`;
+
+        // Farklı hızlar
+        const duration = Math.random() * 28 + 32; // 32-60 saniye
         star.style.animationDuration = `${duration}s`;
-        
-        star.style.opacity = Math.random() * 0.8 + 0.2;
-        
-        starsContainer.appendChild(star);
+
+        // Rastgele gecikme
+        star.style.animationDelay = `-${Math.random() * 40}s`;
+
+        // Farklı parlaklık
+        star.style.opacity = Math.random() * 0.7 + 0.4;
+
+        container.appendChild(star);
       }
     }
 
     // Dünya etrafındaki dönen noktalar
     function createOrbitDots() {
       const orbit = document.getElementById('orbit');
-      const numDots = 18;
-      
-      for (let i = 0; i < numDots; i++) {
+      const count = 16;
+
+      for (let i = 0; i < count; i++) {
         const dot = document.createElement('div');
         dot.className = 'orbit-dot';
-        
-        const delay = (i * 1.2);
-        dot.style.animationDelay = `-${delay}s`;
-        
-        // Farklı hızlar için biraz varyasyon
-        const duration = 22 + Math.random() * 8;
-        dot.style.animationDuration = `${duration}s`;
-        
-        dot.style.width = `${6 + Math.random() * 4}px`;
-        dot.style.height = dot.style.width;
-        
+
+        const angle = (i * 360) / count;
+        const delay = - (i * 1.4);
+
+        dot.style.animationDelay = `${delay}s`;
+        dot.style.animationDuration = `${24 + Math.random() * 12}s`; // farklı hızlar
+
         orbit.appendChild(dot);
       }
     }
 
-    // Sayfa yüklendiğinde çalıştır
+    // Başlat
     window.onload = () => {
       createStars();
       createOrbitDots();
