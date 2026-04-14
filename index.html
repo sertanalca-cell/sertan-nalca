@@ -3,20 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sertan Nalça</title>
 
 <style>
 body {
   margin: 0;
   overflow: hidden;
-  font-family: 'Georgia', serif;
-  background: black;
+  font-family: Georgia;
 }
 
-#bg {
+/* 🌌 SAMANYOLU ARKA PLAN (SENİN GÖRSEL) */
+.bg {
   position: fixed;
   width: 100%;
   height: 100%;
+  background: url('galaxy.jpg') center/cover no-repeat;
+  z-index: -2;
+}
+
+/* 3D canvas üstte */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
 }
 
 .content {
@@ -27,16 +36,12 @@ body {
   color: white;
 }
 
-h1 {
-  font-size: 40px;
-}
-
 .subtitle {
-  font-size: 18px;
-  color: #caa7ff;
-  transition: opacity 1s;
+  color: #b48cff;
+  transition: 1s;
 }
 
+/* butonlar */
 .buttons {
   position: absolute;
   bottom: 80px;
@@ -48,48 +53,48 @@ h1 {
   margin: 10px auto;
   padding: 15px;
   border-radius: 25px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.4);
   color: white;
-  font-size: 18px;
-  border: 1px solid rgba(255,255,255,0.2);
   position: relative;
   overflow: hidden;
 }
 
-.orbit {
+/* 🚀 dönen obje */
+.ship {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+  width: 10px;
+  height: 10px;
   background: white;
-  animation: orbit 4s linear infinite;
+  border-radius: 50%;
+  animation: spin 6s linear infinite;
 }
 
-@keyframes orbit {
-  0% { transform: rotate(0deg) translateX(100px) rotate(0deg); }
-  100% { transform: rotate(360deg) translateX(100px) rotate(-360deg); }
+@keyframes spin {
+  0% { transform: rotate(0deg) translateX(120px); }
+  100% { transform: rotate(360deg) translateX(120px); }
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="bg"></canvas>
+<div class="bg"></div>
+<canvas id="c"></canvas>
 
 <div class="content">
   <h1>Sertan Nalça</h1>
-  <div class="subtitle" id="subtitle">AI Developer & Creator</div>
+  <div class="subtitle" id="text">AI Developer & Creator</div>
 </div>
 
 <div class="buttons">
   <div class="btn" onclick="window.location='https://instagram.com/sertanalca'">
     Instagram
-    <div class="orbit"></div>
+    <div class="ship"></div>
   </div>
 
   <div class="btn" onclick="window.location='https://wa.me/355692033673'">
     WhatsApp
-    <div class="orbit"></div>
+    <div class="ship"></div>
   </div>
 </div>
 
@@ -97,96 +102,71 @@ h1 {
 
 <script>
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({canvas: document.getElementById("c"), alpha:true});
+renderer.setSize(innerWidth, innerHeight);
 
-const renderer = new THREE.WebGLRenderer({canvas: document.getElementById('bg')});
-renderer.setSize(window.innerWidth, window.innerHeight);
+camera.position.z = 4;
 
-camera.position.z = 5;
-
-// 🌍 Dünya
-const textureLoader = new THREE.TextureLoader();
+// 🌍 GERÇEKÇİ DÜNYA
+const loader = new THREE.TextureLoader();
 
 const earth = new THREE.Mesh(
   new THREE.SphereGeometry(1, 64, 64),
   new THREE.MeshStandardMaterial({
-    map: textureLoader.load('https://threejs.org/examples/textures/earth_atmos_2048.jpg'),
-    roughness: 1,
-    metalness: 0
+    map: loader.load('https://threejs.org/examples/textures/earth_atmos_2048.jpg')
   })
 );
-
 scene.add(earth);
 
-// 🌙 Ay
+// 🌙 AY
 const moon = new THREE.Mesh(
   new THREE.SphereGeometry(0.27, 32, 32),
   new THREE.MeshStandardMaterial({
-    map: textureLoader.load('https://threejs.org/examples/textures/moon_1024.jpg')
+    map: loader.load('https://threejs.org/examples/textures/moon_1024.jpg')
   })
 );
-
 scene.add(moon);
 
-// 💡 Işık (güneş etkisi)
-const light = new THREE.PointLight(0xffffff, 1.5);
-light.position.set(5, 3, 5);
+// ☀️ GÜNEŞ IŞIĞI → yarısı aydınlık yarısı karanlık
+const light = new THREE.DirectionalLight(0xffffff, 1.5);
+light.position.set(5, 2, 5);
 scene.add(light);
 
-// ⭐ yıldızlar
-const starsGeometry = new THREE.BufferGeometry();
-const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff });
-
-const starVertices = [];
-for (let i = 0; i < 10000; i++) {
-  starVertices.push((Math.random() - 0.5) * 2000);
-  starVertices.push((Math.random() - 0.5) * 2000);
-  starVertices.push((Math.random() - 0.5) * 2000);
-}
-
-starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-const stars = new THREE.Points(starsGeometry, starsMaterial);
-scene.add(stars);
-
-// 🌌 animasyon
 let angle = 0;
 
-function animate() {
+function animate(){
   requestAnimationFrame(animate);
 
   // dünya dönüyor
   earth.rotation.y += 0.002;
 
-  // ay dünya etrafında dönüyor
+  // ay dönüyor
   angle += 0.01;
-  moon.position.set(Math.sin(angle) * 2, 0, Math.cos(angle) * 2);
+  moon.position.set(Math.sin(angle)*2, 0, Math.cos(angle)*2);
 
-  // yıldız akışı (cosmos hissi)
-  stars.position.z += 0.1;
-  if (stars.position.z > 100) stars.position.z = 0;
+  // kamera uzaklaşıyor (cosmos hissi)
+  camera.position.z += 0.0005;
 
   renderer.render(scene, camera);
 }
-
 animate();
 
-// ✨ yazı döngüsü
-const subtitle = document.getElementById("subtitle");
+// ✨ YAZI TOZ EFEKTİ
+const t = document.getElementById("text");
 
-setInterval(() => {
-  subtitle.style.opacity = 0;
+setInterval(()=>{
+  t.style.opacity = 0;
 
-  setTimeout(() => {
-    if (subtitle.innerText === "AI Developer & Creator") {
-      subtitle.innerText = "I'm creating something amazing for everyone";
-    } else {
-      subtitle.innerText = "AI Developer & Creator";
-    }
-    subtitle.style.opacity = 1;
-  }, 1000);
+  setTimeout(()=>{
+    t.innerText = t.innerText.includes("AI")
+      ? "I'm creating something amazing for everyone"
+      : "AI Developer & Creator";
 
-}, 5000);
+    t.style.opacity = 1;
+  },1000);
 
+},5000);
 </script>
 
 </body>
