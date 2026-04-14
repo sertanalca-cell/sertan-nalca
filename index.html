@@ -11,7 +11,8 @@
 
     body {
       height: 100vh;
-      background: #000000;
+      background: #000000 url('https://picsum.photos/id/1015/1920/1080') center/cover;
+      background-size: cover;
       color: white;
       font-family: 'Inter', system-ui, sans-serif;
       display: flex;
@@ -22,40 +23,29 @@
       position: relative;
     }
 
-    /* Yıldızlar + hareket efekti */
+    /* Yıldız efekti */
     .stars {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       background: transparent;
       box-shadow: 
-        80px 120px 1px #fff,
-        200px 50px 1px #fff,
-        350px 180px 1px #fff,
-        480px 80px 1px #fff,
-        650px 220px 1px #fff,
-        820px 140px 1px #fff,
-        950px 300px 1px #fff,
-        1100px 90px 1px #fff,
-        120px 350px 1px #fff,
-        700px 380px 1px #fff;
-      opacity: 0.75;
-      animation: starsMove 120s linear infinite;
+        50px 80px 1px #fff,
+        120px 200px 1px #fff,
+        300px 150px 1px #fff,
+        450px 300px 1px #fff,
+        600px 80px 1px #fff,
+        750px 250px 1px #fff,
+        900px 120px 1px #fff,
+        1100px 350px 1px #fff;
+      opacity: 0.6;
+      animation: twinkle 8s infinite alternate;
       pointer-events: none;
       z-index: 1;
     }
 
-    @keyframes starsMove {
-      from { transform: translate(0, 0); }
-      to   { transform: translate(-80px, 60px); } /* Üst-sağdan sola-alta doğru yavaş hareket */
-    }
-
-    .twinkle {
-      animation: twinkle 4s infinite alternate ease-in-out;
-    }
-
     @keyframes twinkle {
-      0% { opacity: 0.6; }
-      100% { opacity: 1; }
+      0% { opacity: 0.5; }
+      100% { opacity: 0.9; }
     }
 
     .content {
@@ -65,44 +55,43 @@
     }
 
     h1 {
-      font-size: 3.7rem;
+      font-size: 3.6rem;
       font-weight: 700;
-      margin-bottom: 10px;
-      text-shadow: 0 0 30px rgba(180, 220, 255, 0.9);
+      margin-bottom: 8px;
+      text-shadow: 0 0 30px rgba(150, 200, 255, 0.9);
     }
 
     .subtitle {
-      font-size: 1.45rem;
-      color: #b0c8ff;
+      font-size: 1.4rem;
+      color: #b0c0ff;
       margin-bottom: 70px;
       letter-spacing: 2px;
     }
 
-    /* Dönmekte olan gerçekçi Dünya */
+    /* Dönen Dünya */
     .earth-container {
       width: 290px;
       height: 290px;
       margin: 0 auto 80px;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 
-        0 0 80px rgba(0, 255, 140, 0.7),
-        0 0 150px rgba(100, 200, 255, 0.5);
-      z-index: 2;
+      perspective: 1000px;
     }
 
     .earth {
       width: 100%;
       height: 100%;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/The_Blue_Marble_%28remastered%29.jpg/1024px-The_Blue_Marble_%28remastered%29.jpg') center/cover;
+      background: url('https://i.imgur.com/2vK8z3L.png') center/cover; /* Glowing yeşil devreli dünya */
       border-radius: 50%;
-      animation: rotateEarth 45s linear infinite;
-      box-shadow: inset 0 0 60px rgba(0, 255, 120, 0.4);
+      box-shadow: 
+        0 0 70px rgba(0, 255, 120, 0.8),
+        0 0 140px rgba(80, 180, 255, 0.6),
+        inset 0 0 60px rgba(255,255,255,0.2);
+      animation: rotateEarth 35s linear infinite;
+      border: 3px solid rgba(0, 255, 180, 0.4);
     }
 
     @keyframes rotateEarth {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+      from { transform: rotateY(0deg); }
+      to   { transform: rotateY(360deg); }
     }
 
     .buttons {
@@ -114,26 +103,26 @@
     }
 
     .btn {
-      padding: 17px 28px;
+      padding: 16px 24px;
       border-radius: 50px;
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       font-weight: 600;
       text-decoration: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 14px;
+      gap: 12px;
       transition: all 0.3s ease;
     }
 
     .btn-instagram {
-      background: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.1);
       color: white;
       border: 1.5px solid rgba(255,255,255,0.4);
     }
 
     .btn-instagram:hover {
-      background: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.2);
       transform: translateY(-3px);
     }
 
