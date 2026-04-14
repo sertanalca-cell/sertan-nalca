@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sertan Universe</title>
+<title>Universe Center</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -23,15 +23,34 @@ body{
   left:0;
 }
 
+/* GALAXY */
+#space{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:url("https://upload.wikimedia.org/wikipedia/commons/3/3f/Milky_Way_IR_Spitzer.jpg");
+  background-size:cover;
+  opacity:0.35;
+  z-index:-2;
+}
+
+/* STAR */
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  opacity:0.7;
+}
+
 /* PROFILE */
 #profile{
   position:absolute;
   top:20px;
   left:20px;
-  z-index:10;
 }
 
-#pfp{
+#profile img{
   width:90px;
   height:90px;
   border-radius:50%;
@@ -40,7 +59,7 @@ body{
   cursor:pointer;
 }
 
-/* CENTER INFO */
+/* INFO */
 #info{
   position:absolute;
   bottom:120px;
@@ -73,6 +92,8 @@ input{width:160px;margin:5px;}
 
 <body>
 
+<div id="space"></div>
+
 <canvas id="bg"></canvas>
 
 <div id="profile">
@@ -87,49 +108,32 @@ input{width:160px;margin:5px;}
 <div id="admin">
   <input type="file" id="file"><br>
   <input id="pass" placeholder="Password"><br>
-  <button onclick="save()">Save</button>
 </div>
 
 <script>
 
-/* ===== STAR SYSTEM (diagonal motion) ===== */
-for(let i=0;i<250;i++){
+/* STAR FIELD */
+for(let i=0;i<200;i++){
   let s=document.createElement("div");
-  s.style.position="absolute";
-  s.style.width="2px";
-  s.style.height="2px";
-  s.style.background="white";
+  s.className="star";
   s.style.left=Math.random()*100+"vw";
   s.style.top=Math.random()*100+"vh";
   document.body.appendChild(s);
-
-  let x = 0.3 + Math.random()*0.6;
-  let y = 0.2 + Math.random()*0.5;
-
-  function move(){
-    let r = s.getBoundingClientRect();
-    s.style.left = r.left + x + "px";
-    s.style.top = r.top + y + "px";
-
-    if(r.left > innerWidth) s.style.left="0px";
-    if(r.top > innerHeight) s.style.top="0px";
-
-    requestAnimationFrame(move);
-  }
-  move();
 }
 
-/* ===== THREE JS UNIVERSE ===== */
+/* THREE JS */
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
 
 const renderer = new THREE.WebGLRenderer({canvas:document.getElementById("bg"),alpha:true});
 renderer.setSize(innerWidth,innerHeight);
-camera.position.z=3;
 
-/* 🌌 REAL GALAXY SPHERE (FIXED) */
+/* CAMERA closer for BIG objects */
+camera.position.z = 2.5;
+
+/* 🌌 GALAXY SPHERE */
 const galaxy = new THREE.Mesh(
-  new THREE.SphereGeometry(50,32,32),
+  new THREE.SphereGeometry(60,32,32),
   new THREE.MeshBasicMaterial({
     map:new THREE.TextureLoader().load("https://upload.wikimedia.org/wikipedia/commons/3/3f/Milky_Way_IR_Spitzer.jpg"),
     side:THREE.BackSide
@@ -137,45 +141,46 @@ const galaxy = new THREE.Mesh(
 );
 scene.add(galaxy);
 
-/* 🌍 EARTH (BIG + CLEAR) */
+/* 🌍 EARTH BIG CENTER */
 const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(1.2,64,64),
+  new THREE.SphereGeometry(1.8,64,64),
   new THREE.MeshBasicMaterial({
     map:new THREE.TextureLoader().load("https://threejs.org/examples/textures/earth_atmos_2048.jpg")
   })
 );
 scene.add(earth);
 
-/* 🌙 MOON (VISIBLE BIGGER) */
+/* 🌙 MOON BIG + CLEAR */
 const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(0.35,32,32),
+  new THREE.SphereGeometry(0.6,32,32),
   new THREE.MeshBasicMaterial({
     map:new THREE.TextureLoader().load("https://threejs.org/examples/textures/moon_1024.jpg")
   })
 );
 scene.add(moon);
 
-/* ANIMATE */
+/* ANIMATION */
 function animate(){
   requestAnimationFrame(animate);
 
   earth.rotation.y += 0.002;
 
-  moon.position.x = Math.sin(Date.now()*0.001)*2.2;
-  moon.position.z = Math.cos(Date.now()*0.001)*2.2;
+  /* BIG ORBIT AROUND EARTH */
+  moon.position.x = Math.sin(Date.now()*0.001)*3;
+  moon.position.z = Math.cos(Date.now()*0.001)*3;
 
   renderer.render(scene,camera);
 }
 animate();
 
-/* ===== PHOTO UPLOAD (NO URL) ===== */
+/* PROFILE UPLOAD */
 document.getElementById("file").onchange = function(e){
-  let reader = new FileReader();
-  reader.onload = function(){
-    localStorage.setItem("pfp",reader.result);
+  let r = new FileReader();
+  r.onload = function(){
+    localStorage.setItem("pfp",r.result);
     load();
   }
-  reader.readAsDataURL(e.target.files[0]);
+  r.readAsDataURL(e.target.files[0]);
 };
 
 /* ADMIN */
@@ -186,12 +191,7 @@ function openAdmin(){
   }
 }
 
-/* SAVE LOAD */
-function save(){
-  alert("Photo saved!");
-  load();
-}
-
+/* LOAD */
 function load(){
   pfp.src = localStorage.getItem("pfp") || "https://i.imgur.com/8Km9tLL.png";
 }
